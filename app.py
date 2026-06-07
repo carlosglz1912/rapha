@@ -170,6 +170,8 @@ if AUTH_ENABLED:
         "/api/auth/integrations/presets",
         "/api/health",
         "/api/version",
+        "/api/bridge/ping",
+        "/api/bridge/templates",
         "/login",
     }
     AUTH_EXEMPT_PREFIXES = ["/static"]
@@ -734,6 +736,9 @@ app.include_router(setup_contacts_routes())
 
 from companion import setup_companion_routes
 app.include_router(setup_companion_routes())
+
+from routes.bridge_routes import setup_bridge_routes
+app.include_router(setup_bridge_routes(document_router=document_router))
 
 # ========= ROUTES (kept in app.py) =========
 

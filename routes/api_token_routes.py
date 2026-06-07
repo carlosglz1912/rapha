@@ -30,6 +30,13 @@ TOKEN_PROFILES = {
     "chat": ["chat"],
     "codex_todos": ["todos:read", "todos:write"],
     "codex_email_drafts": ["email:read", "email:draft", "documents:read", "documents:write"],
+    "opendoctor": [
+        "chat",
+        "documents:read",
+        "documents:write",
+        "memory:read",
+        "memory:write",
+    ],
 }
 
 

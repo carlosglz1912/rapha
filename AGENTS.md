@@ -34,9 +34,9 @@ git log --oneline rapha-v0-base..upstream/dev -- src/ routes/ core/ | head -20
 
 | Item | Valor |
 |------|-------|
-| Última acción | Fase 2 — plantillas clínicas, privacy gate, skills seed, CSS picker |
-| Siguiente tarea | Fase 3 — spike OpenDoctor Electron → `:7000` (opcional) |
-| Tests | `venv/bin/python -m pytest tests/ -q` → 2633 passed (2026-06-07) |
+| Última acción | Fase 3 spike — `/api/bridge/*`, token profile `opendoctor`, cliente `@opendoctor/rapha-bridge` |
+| Siguiente tarea | UI OpenDoctor que consuma `window.electronAPI.rapha.*`; flujos hero en producto |
+| Tests | `venv/bin/python -m pytest tests/ -q` → 2640 passed (2026-06-07) |
 | Bloqueos | ninguno |
 
 ## Comandos

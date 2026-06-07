@@ -58,7 +58,7 @@ Futuro plausible: sidecar HTTP local (:7000), no fusión de repos a corto plazo.
 | 0 — Sync upstream | Hecho | Tag `rapha-v0-base` |
 | 1 — Rebrand Rapha | Hecho | `dev` @ rebrand commit |
 | 2 — Especialización clínica | Hecho | Plantillas, skills seed, privacy gate, UX consultorio |
-| 3 — Puente OpenDoctor | Opcional | Spike Electron → `:7000` |
+| 3 — Puente OpenDoctor | Spike hecho | `/api/bridge/*` + `@opendoctor/rapha-bridge` + IPC desktop |
 
 ### Fase 2 — detalle
 
