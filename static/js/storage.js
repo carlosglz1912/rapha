@@ -1,10 +1,47 @@
 // static/js/storage.js
 // Centralized localStorage access with key constants and JSON parse safety
 
+const LEGACY_KEY_PREFIX = 'odysseus-';
+const KEY_PREFIX = 'rapha-';
+
+function migrateLegacyKeys() {
+  try {
+    const moves = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith(LEGACY_KEY_PREFIX)) continue;
+      const next = KEY_PREFIX + key.slice(LEGACY_KEY_PREFIX.length);
+      if (localStorage.getItem(next) === null) {
+        moves.push([key, next]);
+      }
+    }
+    for (const [oldKey, newKey] of moves) {
+      localStorage.setItem(newKey, localStorage.getItem(oldKey));
+    }
+    for (const [oldKey] of moves) {
+      localStorage.removeItem(oldKey);
+    }
+    const legacyUser = localStorage.getItem('odysseus-last-user');
+    if (legacyUser && !localStorage.getItem('rapha-last-user')) {
+      localStorage.setItem('rapha-last-user', legacyUser);
+      localStorage.removeItem('odysseus-last-user');
+    }
+    const legacyAuth = localStorage.getItem('odysseus-auth-user');
+    if (legacyAuth && !localStorage.getItem('rapha-auth-user')) {
+      localStorage.setItem('rapha-auth-user', legacyAuth);
+      localStorage.removeItem('odysseus-auth-user');
+    }
+  } catch (e) {
+    console.warn('[Storage] Legacy key migration skipped:', e.message);
+  }
+}
+
+migrateLegacyKeys();
+
 // ── Key constants ──
 export const KEYS = {
-  THEME: 'odysseus-theme',
-  TOGGLES: 'odysseus-toggles',
+  THEME: 'rapha-theme',
+  TOGGLES: 'rapha-toggles',
   SIDEBAR_COLLAPSED: 'sidebar-collapsed',
   SIDEBAR_WIDTH: 'sidebar-width',
   SIDEBAR_SIDE: 'sidebar-side',
@@ -13,19 +50,19 @@ export const KEYS = {
   COMPARE_CHAT: 'compare-continue-chat',
   COMPARE_BLIND: 'compare-blind',
   COMPARE_RANDOM: 'compare-randomize',
-  MODELS_EXPANDED: 'odysseus-model-expanded',
-  MODEL_ENDPOINTS: 'odysseus-model-endpoints',
-  MODEL_SELECTED: 'odysseus-selected-model',
-  SORT_ORDER: 'odysseus-sessions-sort',
-  CHAT_SEARCH_SCOPE: 'odysseus-search-scope',
-  INCOGNITO: 'odysseus-incognito',
-  RAG_ACTIVE: 'odysseus-rag-active',
-  MCP_ACTIVE: 'odysseus-mcp-active',
+  MODELS_EXPANDED: 'rapha-model-expanded',
+  MODEL_ENDPOINTS: 'rapha-model-endpoints',
+  MODEL_SELECTED: 'rapha-selected-model',
+  SORT_ORDER: 'rapha-sessions-sort',
+  CHAT_SEARCH_SCOPE: 'rapha-search-scope',
+  INCOGNITO: 'rapha-incognito',
+  RAG_ACTIVE: 'rapha-rag-active',
+  MCP_ACTIVE: 'rapha-mcp-active',
   SECTION_ORDER: 'sidebar-section-order',
   ADMIN_LAST_TAB: 'admin-last-tab',
-  DENSITY: 'odysseus-density',
-  WORKSPACE: 'odysseus-workspace',
-  PLAN: 'odysseus-plan'
+  DENSITY: 'rapha-density',
+  WORKSPACE: 'rapha-workspace',
+  PLAN: 'rapha-plan'
 };
 
 /**

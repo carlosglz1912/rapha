@@ -356,7 +356,7 @@ async function _selectAddedModelInChat(endpoint) {
     }
   } catch (_) {}
   try {
-    document.dispatchEvent(new CustomEvent('odysseus:auto-select-model', {
+    document.dispatchEvent(new CustomEvent('rapha:auto-select-model', {
       detail: {
         endpointId: endpoint.id || '',
         endpointName: endpoint.name || '',
@@ -1154,7 +1154,7 @@ function initEndpointForm() {
   document.querySelectorAll('#adm-add-api, #adm-add-local').forEach((sec) => {
     const head = sec.querySelector('.adm-section-toggle');
     if (!head) return;
-    const key = 'odysseus.addModels.' + sec.id + '.open';
+    const key = 'rapha.addModels.' + sec.id + '.open';
     let open = false;
     try { open = localStorage.getItem(key) === '1'; } catch {}
     const apply = () => {
@@ -1175,7 +1175,7 @@ function initEndpointForm() {
   document.querySelectorAll('.adm-quickstart-section').forEach((sec) => {
     const head = sec.querySelector('.adm-quickstart-toggle');
     if (!head) return;
-    const key = 'odysseus.addModels.' + sec.id + '.open';
+    const key = 'rapha.addModels.' + sec.id + '.open';
     let open = false;
     try { open = localStorage.getItem(key) === '1'; } catch {}
     const apply = () => {
@@ -2100,7 +2100,7 @@ function initBackup() {
       const blob = await res.blob();
       const disposition = res.headers.get('Content-Disposition') || '';
       const match = disposition.match(/filename=(.+)/);
-      const filename = match ? match[1] : 'odysseus_backup.json';
+      const filename = match ? match[1] : 'rapha_backup.json';
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = filename;
