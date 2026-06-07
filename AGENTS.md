@@ -34,9 +34,10 @@ git log --oneline rapha-v0-base..upstream/dev -- src/ routes/ core/ | head -20
 
 | Item | Valor |
 |------|-------|
-| Última fase completada | Fase 1 — rebrand |
-| Siguiente tarea | Fase 2 — especialización clínica (ver `docs/VISION.md`) |
-| Tests | `venv/bin/python -m pytest tests/ -q` → 2604 passed (2026-06-07) |
+| Última acción | Fase 2 — plantillas clínicas, privacy gate, skills seed, CSS picker |
+| Siguiente tarea | Fase 3 — spike OpenDoctor Electron → `:7000` (opcional) |
+| Tests | `venv/bin/python -m pytest tests/ -q` → 2633 passed (2026-06-07) |
+| Bloqueos | ninguno |
 
 ## Comandos
 

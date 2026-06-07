@@ -1,0 +1,46 @@
+{
+  "documents": [
+    {
+      "id": "soap",
+      "label": "Nota SOAP",
+      "description": "Subjetivo, objetivo, evaluación y plan",
+      "title": "Consulta — SOAP",
+      "language": "markdown",
+      "content": "# Consulta — SOAP\n\n**Fecha:** \n**Motivo de consulta:** \n\n## Subjetivo (S)\n- Síntomas / queja principal:\n- Antecedentes relevantes:\n- Medicación actual:\n\n## Objetivo (O)\n- Signos vitales:\n- Exploración física:\n- Resultados relevantes:\n\n## Evaluación (A)\n- Impresión diagnóstica:\n- Diagnósticos diferenciales:\n\n## Plan (P)\n- Estudios / laboratorio:\n- Tratamiento:\n- Indicaciones al paciente:\n- Seguimiento:\n"
+    },
+    {
+      "id": "resumen-consulta",
+      "label": "Resumen de consulta",
+      "description": "Síntesis breve para archivo o seguimiento",
+      "title": "Resumen de consulta",
+      "language": "markdown",
+      "content": "# Resumen de consulta\n\n**Fecha:** \n**Tipo de consulta:** \n\n## Motivo\n\n## Hallazgos principales\n\n## Conducta\n\n## Pendientes / seguimiento\n"
+    },
+    {
+      "id": "consentimiento",
+      "label": "Consentimiento informado",
+      "description": "Borrador de consentimiento (revisar y adaptar)",
+      "title": "Consentimiento informado",
+      "language": "markdown",
+      "content": "# Consentimiento informado\n\n**Procedimiento o intervención:** \n**Fecha:** \n\n## Información al paciente\n\nSe explicó al paciente, en términos comprensibles:\n- Naturaleza del procedimiento\n- Beneficios esperados\n- Riesgos y complicaciones conocidas\n- Alternativas disponibles\n- Derecho a revocar el consentimiento\n\n## Declaración\n\nDeclaro que he recibido información suficiente y he tenido oportunidad de hacer preguntas.\n\n**Nombre del paciente:** \n**Firma del profesional:** \n"
+    }
+  ],
+  "notes": [
+    {
+      "id": "seguimiento",
+      "label": "Seguimiento",
+      "description": "Recordatorio de seguimiento clínico",
+      "title": "Seguimiento",
+      "note_type": "note",
+      "content": "Paciente:\nMotivo de seguimiento:\nPróxima cita:\nPendientes:\n"
+    },
+    {
+      "id": "lista-verificacion",
+      "label": "Lista pre-consulta",
+      "description": "Checklist antes de la consulta",
+      "title": "Pre-consulta",
+      "note_type": "todo",
+      "content": "Revisar estudios previos\nConfirmar signos vitales\nActualizar medicación\n"
+    }
+  ]
+}

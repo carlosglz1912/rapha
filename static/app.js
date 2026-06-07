@@ -25,6 +25,7 @@ import galleryModule from './js/gallery.js';
 import tasksModule from './js/tasks.js';
 import calendarModule from './js/calendar.js';
 import notesModule from './js/notes.js';
+import { pickDocumentTemplate } from './js/clinical-templates.js';
 import adminModule from './js/admin.js';
 import settingsModule from './js/settings.js';
 // Eagerly bind unified minimize/restore behavior across all tool modals.
@@ -1070,7 +1071,12 @@ function initializeEventListeners() {
     libraryNewDocBtn.addEventListener('click', async (e) => {
       e.stopPropagation();
       try {
-        if (documentModule && documentModule.newDocument) await documentModule.newDocument();
+        const tpl = await pickDocumentTemplate(libraryNewDocBtn);
+        if (tpl && documentModule?.newDocumentFromTemplate) {
+          await documentModule.newDocumentFromTemplate(tpl);
+        } else if (documentModule?.newDocument) {
+          await documentModule.newDocument();
+        }
       } catch (err) {
         console.error('New document from Library failed:', err);
         if (uiModule && uiModule.showError) uiModule.showError('Could not create document');

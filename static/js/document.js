@@ -3659,7 +3659,7 @@ import * as Modals from './modalManager.js';
       // Update textarea (keep existing content the user typed)
       const textarea = document.getElementById('doc-editor-textarea');
       if (textarea) {
-        textarea.placeholder = 'Document content...';
+        textarea.placeholder = 'Escribe aquí — tú decides, la IA asiste.';
       }
       syncHighlighting();
       renderTabs();
@@ -3925,7 +3925,7 @@ import * as Modals from './modalManager.js';
       <div id="doc-editor-wrap" class="doc-editor-wrap">
         <div id="doc-line-numbers" class="doc-line-numbers">1</div>
         <pre id="doc-editor-highlight" class="doc-editor-highlight"><code id="doc-editor-code"></code></pre>
-        <textarea id="doc-editor-textarea" class="doc-editor-textarea" placeholder="Document content..." spellcheck="false"></textarea>
+        <textarea id="doc-editor-textarea" class="doc-editor-textarea" placeholder="Escribe aquí — tú decides, la IA asiste." spellcheck="false"></textarea>
       </div>
       <!-- WYSIWYG email body. In email mode this replaces the source editor:
            B/I/S act on the live text (execCommand), and on send its HTML becomes
@@ -5807,7 +5807,7 @@ import * as Modals from './modalManager.js';
   // Create a new blank document, reusing the current/last session or
   // auto-creating one. Same flow as the tab-bar "+" — the single entry point
   // the sidebar Library "+" should use too.
-  export async function newDocument() {
+  export async function newDocument(opts = {}) {
     let sessionId = docs.get(activeDocId)?.sessionId
       || _lastSessionId
       || (sessionModule && sessionModule.getCurrentSessionId());
@@ -5815,12 +5815,24 @@ import * as Modals from './modalManager.js';
       try { sessionId = await _autoCreateSession(); }
       catch (e) { console.error('Failed to auto-create session for document:', e); return; }
     }
-    await createDocument(sessionId);
+    await createDocument(sessionId, opts);
   }
 
-  export async function createDocument(sessionId) {
+  export async function newDocumentFromTemplate(template) {
+    if (!template) return newDocument();
+    return newDocument({
+      title: template.title || '',
+      content: template.content || '',
+      language: template.language || 'markdown',
+    });
+  }
+
+  export async function createDocument(sessionId, opts = {}) {
     if (_creatingDoc) return;
     _creatingDoc = true;
+    const title = opts.title ?? '';
+    const content = opts.content ?? '';
+    const language = opts.language ?? 'markdown';
     // If the panel was in empty-state, the user may type into the editor
     // during the create round-trip — preserve that text into the new doc
     // instead of letting switchToDoc blank it.
@@ -5831,9 +5843,9 @@ import * as Modals from './modalManager.js';
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           session_id: sessionId,
-          title: '',
-          content: '',
-          language: 'markdown',
+          title,
+          content,
+          language,
         }),
       });
       const doc = await res.json();
@@ -5843,7 +5855,7 @@ import * as Modals from './modalManager.js';
       let textarea = document.getElementById('doc-editor-textarea');
       if (textarea) {
         textarea.disabled = false;
-        textarea.placeholder = 'Document content...';
+        textarea.placeholder = 'Escribe aquí — tú decides, la IA asiste.';
       }
       // Capture text typed during the round-trip (only when starting from the
       // empty editor — don't steal another doc's content).
@@ -9052,7 +9064,7 @@ import * as Modals from './modalManager.js';
     const textarea = document.getElementById('doc-editor-textarea');
     if (textarea) {
       textarea.disabled = false;
-      textarea.placeholder = 'Document content...';
+      textarea.placeholder = 'Escribe aquí — tú decides, la IA asiste.';
       textarea.value = '';
     }
     // Show streaming indicator
@@ -9331,7 +9343,7 @@ import * as Modals from './modalManager.js';
     // Re-enable editor if it was in empty state
     if (textarea) {
       textarea.disabled = false;
-      textarea.placeholder = 'Document content...';
+      textarea.placeholder = 'Escribe aquí — tú decides, la IA asiste.';
     }
     if (badge) badge.textContent = `v${data.version || 1}`;
     if (data.title && titleInput) titleInput.value = data.title;
@@ -9747,6 +9759,7 @@ const documentModule = {
   swapSide,
   createDocument,
   newDocument,
+  newDocumentFromTemplate,
   loadDocument,
   injectFreshDoc,
   ensurePaneMounted: _ensureDocPaneMounted,

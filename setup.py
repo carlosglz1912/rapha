@@ -14,8 +14,12 @@ import sys
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 
+CLINICAL_SKILLS_SEED = os.path.join(BASE_DIR, "seeds", "skills", "clinical")
+CLINICAL_SKILLS_DEST = os.path.join(DATA_DIR, "skills", "clinical")
+
 DIRS = [
     DATA_DIR,
+    os.path.join(DATA_DIR, "skills"),
     os.path.join(DATA_DIR, "uploads"),
     os.path.join(DATA_DIR, "personal_docs"),
     os.path.join(DATA_DIR, "personal_uploads"),
@@ -136,6 +140,43 @@ def create_default_admin():
         return "skipped"
 
 
+def seed_clinical_skills():
+    """Copy bundled clinical SKILL.md seeds into data/skills/clinical/ (skip existing)."""
+    if not os.path.isdir(CLINICAL_SKILLS_SEED):
+        print("  [skip] No clinical skill seeds found")
+        return
+
+    os.makedirs(CLINICAL_SKILLS_DEST, exist_ok=True)
+    seeded = 0
+    skipped = 0
+
+    for entry in sorted(os.listdir(CLINICAL_SKILLS_SEED)):
+        src_dir = os.path.join(CLINICAL_SKILLS_SEED, entry)
+        if not os.path.isdir(src_dir):
+            continue
+        skill_file = os.path.join(src_dir, "SKILL.md")
+        if not os.path.isfile(skill_file):
+            continue
+
+        dest_dir = os.path.join(CLINICAL_SKILLS_DEST, entry)
+        dest_file = os.path.join(dest_dir, "SKILL.md")
+        if os.path.isfile(dest_file):
+            skipped += 1
+            continue
+
+        os.makedirs(dest_dir, exist_ok=True)
+        shutil.copy2(skill_file, dest_file)
+        seeded += 1
+        print(f"  [ok] clinical/{entry}/SKILL.md")
+
+    if seeded:
+        print(f"  [ok] Seeded {seeded} clinical skill(s)")
+    elif skipped:
+        print(f"  [skip] Clinical skills already present ({skipped})")
+    else:
+        print("  [skip] No clinical skills to seed")
+
+
 def create_env():
     """Copy .env.example to .env if it doesn't exist."""
     env_path = os.path.join(BASE_DIR, ".env")
@@ -242,7 +283,10 @@ def main():
         print(f"  [warn] Database init failed: {e}")
         print("         This is OK if dependencies aren't installed yet.")
 
-    print("\n5. Creating initial admin...")
+    print("\n5. Seeding clinical skills...")
+    seed_clinical_skills()
+
+    print("\n6. Creating initial admin...")
 
     admin_status = "failed"
 
