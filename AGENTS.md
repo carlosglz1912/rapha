@@ -1,86 +1,117 @@
-# AGENTS.md — contexto para agentes
+# AGENTS.md
 
-Lee esto primero si retomas trabajo en **Rapha** sin historial de chat.
+Instrucciones **operativas** para agentes. Visión, roadmap y decisiones estratégicas → [`docs/VISION.md`](docs/VISION.md).
 
-## Qué es Rapha
+## Lectura rápida
 
-- Fork **independiente** de [Odysseus](https://github.com/pewdiepie-archdaemon/odysseus) (MIT).
-- Repo: `https://github.com/carlosglz1912/rapha`
-- Working copy habitual: `/Volumes/DEV/luke` (nombre de carpeta legacy; el producto es **Rapha**).
-- Orientación: workspace AI **clínico-adjacente** — local-first, privacidad, IA como asistente (no reemplazo del profesional).
-- **No** es un EHR; cumplimiento NOM / `MedicalBlock` vive en **OpenDoctor** (`/Volumes/DEV/opendoctor`) — otro monorepo alpha, sin integración técnica aún.
+| Pregunta | Dónde |
+|----------|-------|
+| ¿Por qué existe Rapha? | `docs/VISION.md` |
+| ¿Qué commit/tag es baseline? | abajo |
+| ¿Cómo corro tests / servidor? | abajo |
+| ¿Qué renombró del rebrand? | tabla compat abajo |
 
-### Identidad del nombre
+## Repo y rutas
 
-**Rapha** (רָפָא — sanar/restaurar). Elegido por significado bíblico, vínculo con medicina, y memoria del abuelo Rafael. Sustituye un intento abandonado de renombrar a "Luke".
-
-## Estado actual (2026-06-07)
-
-| Fase | Estado |
-|------|--------|
-| Fase 0 — sync upstream | Hecho. Tag `rapha-v0-base` = última línea común con upstream. |
-| Fase 1 — rebrand Odysseus→Rapha | Hecho en `dev` (`44e3a0e`). 2604 tests pasan. |
-| Fase 2 — especialización clínica | Pendiente (plantillas, skills, privacy gate, copy UX). |
-| Fase 3 — puente OpenDoctor | Pendiente (spike HTTP Electron → `:7000`). |
-
-### Git
-
-```bash
-origin   → carlosglz1912/rapha
-upstream → pewdiepie-archdaemon/odysseus  # solo lectura / cherry-pick puntual
-rama principal → dev
+```
+origin:     https://github.com/carlosglz1912/rapha.git
+upstream:   https://github.com/pewdiepie-archdaemon/odysseus.git  # solo lectura
+rama:       dev
+worktree:   /Volumes/DEV/luke          # carpeta legacy; producto = Rapha
+ecosistema: /Volumes/DEV/opendoctor    # sin código compartido aún
 ```
 
-**Política upstream:** fork totalmente independiente. **No** hacer merge continuo de `upstream/dev`. Cherry-pick solo fixes de seguridad o bugs que afecten a Rapha. Nuevos experimentos → otro fork dedicado.
+**Tags:** `rapha-v0-base` = último sync upstream antes del rebrand.
 
-Revisión opcional:
+**Política git:** no mergear `upstream/dev` de forma rutinaria. Cherry-pick puntual solo si hay CVE o bug que nos afecte.
 
 ```bash
 git fetch upstream dev
 git log --oneline rapha-v0-base..upstream/dev -- src/ routes/ core/ | head -20
 ```
 
-## Compatibilidad tras el rebrand
+## Estado de la sesión (actualizar al cerrar trabajo)
 
-| Antes (Odysseus) | Ahora (Rapha) |
-|------------------|---------------|
-| `ODYSSEUS_*` env | `RAPHA_*` (fallback `ODYSSEUS_*` en setup/Docker) |
-| `odysseus_session` cookie | `rapha_session` — re-login tras rebrand |
-| API tokens `ody_*` | Nuevos: `rph_*`; los `ody_*` existentes siguen válidos |
-| `localStorage` `odysseus-*` | Migración automática a `rapha-*` en `static/js/storage.js` |
-| CLI `odysseus-*` | `scripts/rapha*` |
-| Docker service `odysseus` | `rapha` |
+| Item | Valor |
+|------|-------|
+| Última fase completada | Fase 1 — rebrand |
+| Siguiente tarea | Fase 2 — especialización clínica (ver `docs/VISION.md`) |
+| Tests | `venv/bin/python -m pytest tests/ -q` → 2604 passed (2026-06-07) |
 
-## Datos locales
-
-- `data/` está en `.gitignore` — no se toca en merges.
-- Backup de precaución: `data.backup-20260607/` (también gitignored).
-- Config de modelos/endpoints: `data/settings.json`.
-
-## Arranque rápido
+## Comandos
 
 ```bash
 cd /Volumes/DEV/luke
 source venv/bin/activate
+
+# servidor
 python -m uvicorn app:app --host 127.0.0.1 --port 7000
-# o: docker compose up -d --build && docker compose logs rapha
+
+# tests (subset rápido)
+python -m pytest tests/test_app.py tests/test_rapha_dispatcher.py -q
+
+# tests (suite completa ~70s)
+python -m pytest tests/ -q
+
+# docker
+docker compose up -d --build
+docker compose logs rapha --tail=50
 ```
 
-## Próxima acción recomendada
+## Mapa del código (puntos de entrada)
 
-**Fase 2** — capa delgada de especialización (sin reescribir el core Python):
+| Área | Ruta |
+|------|------|
+| App FastAPI | `app.py` |
+| Auth / DB | `core/`, `routes/auth_routes.py` |
+| Agente / LLM | `src/agent_loop.py`, `src/llm_core.py` |
+| Cookbook | `routes/cookbook_routes.py`, `services/hwfit/` |
+| Frontend PWA | `static/index.html`, `static/js/` |
+| CLI | `scripts/rapha`, `scripts/rapha-*` |
+| Integraciones agentes | `integrations/codex/`, `integrations/claude/` |
+| Env compat | `core/rapha_env.py` |
+| Datos usuario | `data/` (gitignored) |
 
-1. Plantillas en Documents/Notes (SOAP, resumen consulta).
-2. Skills clínicos empaquetados en `data/skills/`.
-3. Privacy gate pre-LLM (concepto de OpenDoctor `privacy-filter`, port a Python).
-4. Copy/UX de consultorio (no náutico Odysseus ni corporate OpenDoctor).
+## Compat Odysseus → Rapha
 
-## Filosofía de ingeniería
+| Antes | Ahora |
+|-------|-------|
+| `ODYSSEUS_*` | `RAPHA_*` (+ fallback en setup/Docker) |
+| cookie `odysseus_session` | `rapha_session` |
+| tokens `ody_*` | nuevos `rph_*`; `ody_*` legacy aún válidos (`app.py`) |
+| `localStorage` `odysseus-*` | migración auto en `static/js/storage.js` |
+| CLI `odysseus-*` | `scripts/rapha-*` |
+| compose service `odysseus` | `rapha` |
 
-- Reutilizar al máximo el core de Odysseus.
-- Cambiar lenguaje/stack si mejora eficiencia o compatibilidad con OpenDoctor — no dudar.
-- Mantener especialización en capas delgadas para facilitar cherry-picks puntuales de upstream.
+## Datos locales
 
-## Relación con OpenDoctor (futuro)
+- `data/settings.json` — endpoints y modelos preconfigurados
+- `data.backup-*/` — backups manuales (gitignored)
+- Merges git **no** tocan `data/`
 
-Rapha = motor local (modelos, agente, productivity). OpenDoctor = capa clínica (Electron, Pi harness, NOM). Puente plausible: sidecar HTTP en `:7000`, no fusión de repos a corto plazo.
+## Convenciones para agentes
+
+**Hacer**
+
+- Leer `docs/VISION.md` antes de features nuevas
+- Mantener especialización clínica en capas delgadas (skills, plantillas, copy) — no refactor masivo del core
+- Correr tests tras cambios en `src/`, `routes/`, `static/js/`
+- Actualizar la tabla "Estado de la sesión" arriba al terminar
+
+**No hacer**
+
+- Merge completo desde `upstream/dev` sin acuerdo explícito
+- Duplicar NOM / `MedicalBlock` de OpenDoctor en Rapha
+- Commitear `data/`, `data.backup-*`, `.env`, secrets
+- Reintroducir branding Odysseus en UI (upstream se cita solo en ACKNOWLEDGMENTS)
+
+## Plantilla — al cerrar sesión
+
+Reemplazar la tabla "Estado de la sesión":
+
+```markdown
+| Última acción | <qué hiciste + evidencia> |
+| Siguiente tarea | <un paso concreto> |
+| Tests | <comando + resultado> |
+| Bloqueos | <si hay> |
+```

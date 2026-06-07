@@ -10,7 +10,7 @@
 
 **Rapha** (רָפָא — *sanar, restaurar*) is an independent fork of [Odysseus](https://github.com/pewdiepie-archdaemon/odysseus), oriented toward health professionals who want a **local-first, privacy-first AI workspace** without surrendering their data to Big Tech.
 
-Baseline synced from upstream `dev` at tag `rapha-v0-base`; this fork does not track upstream continuously.
+Baseline synced from upstream `dev` at tag `rapha-v0-base`; this fork does not track upstream continuously. See [`docs/VISION.md`](docs/VISION.md) for roadmap and [`AGENTS.md`](AGENTS.md) for agent handoff.
 
 A self-hosted AI workspace on your own hardware — chat, agents, documents, email, calendar, and local model serving. The AI assists; you stay in control.
 
