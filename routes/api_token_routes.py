@@ -33,6 +33,13 @@ TOKEN_PROFILES = {
     "codex_todos": ["todos:read", "todos:write"],
     "codex_documents": ["documents:read", "documents:write"],
     "codex_email_drafts": ["email:read", "email:draft", "documents:read", "documents:write"],
+    "opendoctor": [
+        "chat",
+        "documents:read",
+        "documents:write",
+        "memory:read",
+        "memory:write",
+    ],
 }
 
 
@@ -127,7 +134,7 @@ def setup_api_token_routes() -> APIRouter:
         scope_list = _normalize_scopes(scopes, profile)
         scopes_value = ",".join(scope_list)
 
-        raw_token = "ody_" + secrets.token_urlsafe(32)
+        raw_token = "rph_" + secrets.token_urlsafe(32)
         token_hash = bcrypt.hashpw(raw_token.encode(), bcrypt.gensalt()).decode()
         token_id = str(uuid.uuid4())[:8]
 

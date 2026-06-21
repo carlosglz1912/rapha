@@ -5,7 +5,7 @@ single compose file and do not honor COMPOSE_FILE or multiple ``-f`` overlays,
 so the repo ships standalone ``docker-compose.gpu-*.yml`` files that inline the
 GPU overlay. The base ``docker-compose.yml`` plus ``docker/gpu.*.yml`` overlays
 remain the source of truth; these tests assert each standalone file equals the
-base compose with only the matching overlay merged into the ``odysseus``
+base compose with only the matching overlay merged into the ``rapha``
 service. No Docker / docker compose is required — everything is pure YAML.
 """
 
@@ -23,7 +23,7 @@ AMD_OVERLAY = ROOT / "docker" / "gpu.amd.yml"
 NVIDIA_STANDALONE = ROOT / "docker-compose.gpu-nvidia.yml"
 AMD_STANDALONE = ROOT / "docker-compose.gpu-amd.yml"
 
-SERVICE = "odysseus"
+SERVICE = "rapha"
 
 
 def _load(path: Path) -> dict:
@@ -52,7 +52,7 @@ def _deep_merge(base: dict, overlay: dict) -> dict:
 
 
 def _merge_overlay_into_base(base: dict, overlay: dict) -> dict:
-    """Build the expected standalone config: base + overlay on odysseus only."""
+    """Build the expected standalone config: base + overlay on Rapha only."""
     expected = copy.deepcopy(base)
     overlay_service = overlay["services"][SERVICE]
     expected["services"][SERVICE] = _deep_merge(

@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+"""Rapha CLI dispatcher backed by the upstream Odysseus commands."""
+
+from __future__ import annotations
+
+import os
+import sys
+from pathlib import Path
+
+VERSION = "1.0.0-rapha.1"
+SCRIPTS_DIR = Path(__file__).resolve().parent
+
+
+def _apply_env_compatibility() -> None:
+    for key, value in list(os.environ.items()):
+        if key.startswith("RAPHA_") and value.strip():
+            os.environ[f"ODYSSEUS_{key.removeprefix('RAPHA_')}"] = value
+
+
+def _commands() -> list[str]:
+    return sorted(
+        path.name.removeprefix("odysseus-")
+        for path in SCRIPTS_DIR.glob("odysseus-*")
+        if path.is_file() and os.access(path, os.X_OK) and "." not in path.name
+    )
+
+
+def main() -> int:
+    _apply_env_compatibility()
+    args = sys.argv[1:]
+    if not args or args == ["help"] or args == ["--help"]:
+        print(f"rapha {VERSION} — every feature, on the shell.\n")
+        print("Usage:  rapha <subcommand> [args...]\n")
+        print("Available subcommands:")
+        for name in _commands():
+            print(f"  {name}")
+        return 0
+    if args[0] in {"-v", "--version"}:
+        print(f"rapha {VERSION}")
+        return 0
+    if args[0] == "help":
+        if len(args) != 2:
+            print("rapha: expected one subcommand after help", file=sys.stderr)
+            return 2
+        name, forwarded = args[1], ["--help"]
+    else:
+        name, forwarded = args[0], args[1:]
+    target = SCRIPTS_DIR / f"odysseus-{name}"
+    if not target.is_file() or not os.access(target, os.X_OK):
+        print(f"rapha: unknown subcommand {name!r}", file=sys.stderr)
+        return 1
+    venv_python = SCRIPTS_DIR.parent / "venv" / "bin" / "python"
+    python = str(venv_python) if venv_python.exists() else sys.executable
+    os.execv(python, [python, str(target), *forwarded])
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

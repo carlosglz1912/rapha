@@ -2,9 +2,12 @@
 """Application-wide constants and configuration values."""
 import os
 
+from rapha_env import apply_rapha_env_aliases
 from src.runtime_paths import get_app_root, get_default_data_dir
 
-APP_VERSION = "1.0.0"
+apply_rapha_env_aliases()
+
+APP_VERSION = "1.0.0-rapha.1"
 
 # Base paths
 BASE_DIR = os.path.join(get_app_root(), "")

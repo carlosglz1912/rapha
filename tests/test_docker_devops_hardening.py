@@ -26,7 +26,7 @@ TEST_DOCS = [
 
 def _compose_env_names(path: Path) -> set[str]:
     compose = yaml.safe_load(path.read_text(encoding="utf-8"))
-    env = compose["services"]["odysseus"]["environment"]
+    env = compose["services"]["rapha"]["environment"]
     return {entry.split("=", 1)[0] for entry in env}
 
 

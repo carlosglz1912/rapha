@@ -1,9 +1,7 @@
-<p align="center">
-  <img src="docs/odysseus-wordmark.png" alt="Odysseus" width="280">
-</p>
+# Rapha
 
 <p align="center">
-  A self-hosted AI workspace for chat, agents, research, documents, email, notes, calendar, and local model workflows.
+  A private, self-hosted AI workspace for healthcare professionals, built on Odysseus 1.0.
 </p>
 
 <p align="center">
@@ -14,27 +12,23 @@
 </p>
 
 <p align="center">
-  <a href="https://repology.org/project/odysseus-ai/versions"><img src="https://repology.org/badge/vertical-allrepos/odysseus-ai.svg" alt="Packaging status"></a>
-</p>
-
-<p align="center">
-  <img src="docs/odysseus.jpg" alt="Odysseus interface">
+  <strong>Rapha 1.0.0-rapha.1</strong> · OpenDoctor bridge · Clinical templates · Privacy gate
 </p>
 
 ---
 
 ## Quick Start
 
-> `dev` is the default branch and gets the newest changes first. Use [`main`](https://github.com/pewdiepie-archdaemon/odysseus/tree/main) if you want the more curated branch.
+> `dev` is Rapha's integration branch. Upstream updates are reviewed monthly and validated before promotion.
 
 ```bash
-git clone https://github.com/pewdiepie-archdaemon/odysseus.git
-cd odysseus
+git clone https://github.com/carlosglz1912/rapha.git
+cd rapha
 cp .env.example .env
 docker compose up -d --build
 ```
 
-Open `http://localhost:7000` when the containers are healthy. The first admin password is printed in `docker compose logs odysseus`.
+Open `http://localhost:7000` when the containers are healthy. The first admin password is printed in `docker compose logs rapha`.
 
 Native installs, GPU notes, Windows/macOS instructions, HTTPS, and configuration live in the [setup guide](docs/setup.md).
 
@@ -59,17 +53,13 @@ Help is welcome. The best entry points are fresh-install testing, provider setup
 
 ## Security
 
-Odysseus is a self-hosted workspace with powerful local tools. Keep auth enabled, keep private data out of Git, and do not expose raw model/service ports publicly. Deployment details are in the [setup guide](docs/setup.md#security-notes).
+Rapha is a self-hosted workspace with powerful local tools. Keep auth enabled, keep private data out of Git, and do not expose raw model/service ports publicly. Deployment details are in the [setup guide](docs/setup.md#security-notes).
 
-## Star History
+## Upstream
 
-<a href="https://www.star-history.com/?repos=pewdiepie-archdaemon%2Fodysseus&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=pewdiepie-archdaemon/odysseus&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=pewdiepie-archdaemon/odysseus&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=pewdiepie-archdaemon/odysseus&type=date&legend=top-left" />
- </picture>
-</a>
+Rapha tracks [pewdiepie-archdaemon/odysseus](https://github.com/pewdiepie-archdaemon/odysseus)
+as a reviewed base. Product-specific code stays in thin compatibility,
+clinical, and OpenDoctor bridge layers; see [docs/VISION.md](docs/VISION.md).
 
 ## License
 

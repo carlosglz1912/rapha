@@ -1,6 +1,29 @@
 // static/js/storage.js
 // Centralized localStorage access with key constants and JSON parse safety
 
+const RAPHA_STORAGE_MIGRATION = 'rapha-storage-migrated-to-upstream-v1';
+
+function migrateRaphaKeysToUpstream() {
+  try {
+    if (localStorage.getItem(RAPHA_STORAGE_MIGRATION) === '1') return;
+    const copies = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith('rapha-')) continue;
+      const upstreamKey = `odysseus-${key.slice('rapha-'.length)}`;
+      if (localStorage.getItem(upstreamKey) === null) copies.push([key, upstreamKey]);
+    }
+    for (const [source, target] of copies) {
+      localStorage.setItem(target, localStorage.getItem(source));
+    }
+    localStorage.setItem(RAPHA_STORAGE_MIGRATION, '1');
+  } catch (error) {
+    console.warn('[Storage] Rapha compatibility migration skipped:', error.message);
+  }
+}
+
+migrateRaphaKeysToUpstream();
+
 // ── Key constants ──
 export const KEYS = {
   THEME: 'odysseus-theme',

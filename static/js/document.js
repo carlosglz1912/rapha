@@ -5954,7 +5954,7 @@ import * as Modals from './modalManager.js';
   // Create a new blank document, reusing the current/last session or
   // auto-creating one. Same flow as the tab-bar "+" — the single entry point
   // the sidebar Library "+" should use too.
-  export async function newDocument() {
+  export async function newDocument(options = {}) {
     let sessionId = docs.get(activeDocId)?.sessionId
       || _lastSessionId
       || (sessionModule && sessionModule.getCurrentSessionId());
@@ -5962,12 +5962,24 @@ import * as Modals from './modalManager.js';
       try { sessionId = await _autoCreateSession(); }
       catch (e) { console.error('Failed to auto-create session for document:', e); return; }
     }
-    await createDocument(sessionId);
+    await createDocument(sessionId, options);
   }
 
-  export async function createDocument(sessionId) {
+  export async function newDocumentFromTemplate(template) {
+    if (!template) return newDocument();
+    return newDocument({
+      title: template.title || '',
+      content: template.content || '',
+      language: template.language || 'markdown',
+    });
+  }
+
+  export async function createDocument(sessionId, options = {}) {
     if (_creatingDoc) return;
     _creatingDoc = true;
+    const title = options.title ?? '';
+    const content = options.content ?? '';
+    const language = options.language ?? 'markdown';
     // If the panel was in empty-state, the user may type into the editor
     // during the create round-trip — preserve that text into the new doc
     // instead of letting switchToDoc blank it.
@@ -5978,9 +5990,9 @@ import * as Modals from './modalManager.js';
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           session_id: sessionId,
-          title: '',
-          content: '',
-          language: 'markdown',
+          title,
+          content,
+          language,
         }),
       });
       const doc = await res.json();
@@ -9907,6 +9919,7 @@ const documentModule = {
   swapSide,
   createDocument,
   newDocument,
+  newDocumentFromTemplate,
   loadDocument,
   injectFreshDoc,
   ensurePaneMounted: _ensureDocPaneMounted,

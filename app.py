@@ -36,6 +36,10 @@ from dotenv import load_dotenv
 # utf-8-sig reads plain UTF-8 (no BOM) identically, so this is safe everywhere.
 load_dotenv(encoding="utf-8-sig")
 
+from rapha_env import apply_rapha_env_aliases, is_supported_api_token
+
+apply_rapha_env_aliases()
+
 import asyncio
 import logging
 import secrets
@@ -53,7 +57,7 @@ from starlette.middleware.gzip import GZipMiddleware
 # Core imports
 from core.constants import (
     BASE_DIR, STATIC_DIR, SESSIONS_FILE,
-    REQUEST_TIMEOUT, OPENAI_API_KEY, AUTH_FILE,
+    REQUEST_TIMEOUT, OPENAI_API_KEY, AUTH_FILE, APP_VERSION,
 )
 from core.database import SessionLocal, ApiToken
 from core.middleware import SecurityHeadersMiddleware, is_cors_preflight
@@ -108,9 +112,9 @@ logger = logging.getLogger(__name__)
 # and passed to FastAPI so we can use the modern context-manager lifecycle
 # instead of the deprecated @app.on_event("startup"/"shutdown") decorators.
 app = FastAPI(
-    title="AI Chat Application",
+    title="Rapha",
     description="Comprehensive AI chat with memory, research, and multi-modal capabilities",
-    version="1.0.0",
+    version=APP_VERSION,
 )
 
 # ========= CORS =========
@@ -127,6 +131,8 @@ app.add_middleware(
         "Content-Type",
         "X-API-Key",
         "X-Auth-Token",
+        "X-Rapha-Internal-Token",
+        "X-Rapha-Owner",
         "X-Odysseus-Internal-Token",
         "X-Odysseus-Owner",
         "X-Requested-With",
@@ -190,7 +196,7 @@ class _RequestTimeoutMiddleware(_BaseHTTPMiddleware):
 app.add_middleware(_RequestTimeoutMiddleware)
 
 # ========= AUTH =========
-from routes.auth_routes import setup_auth_routes, SESSION_COOKIE
+from routes.auth_routes import get_session_cookie, setup_auth_routes
 
 auth_manager = AuthManager()
 app.state.auth_manager = auth_manager
@@ -211,6 +217,8 @@ if AUTH_ENABLED:
         "/api/auth/integrations/presets",
         "/api/health",
         "/api/version",
+        "/api/bridge/ping",
+        "/api/bridge/templates",
         "/login",
     }
     AUTH_EXEMPT_PREFIXES = ["/static"]
@@ -318,14 +326,26 @@ if AUTH_ENABLED:
             # (no admin cookie available in that context). Restricted to
             # loopback clients + matching token to keep it locked down.
             try:
-                from core.middleware import INTERNAL_TOOL_HEADER, INTERNAL_TOOL_TOKEN as _ITT, INTERNAL_TOOL_USER
-                _hdr = request.headers.get(INTERNAL_TOOL_HEADER)
+                from core.middleware import (
+                    INTERNAL_TOOL_HEADER,
+                    INTERNAL_TOOL_TOKEN as _ITT,
+                    INTERNAL_TOOL_USER,
+                    LEGACY_INTERNAL_TOOL_HEADER,
+                )
+                _hdr = request.headers.get(INTERNAL_TOOL_HEADER) or request.headers.get(
+                    LEGACY_INTERNAL_TOOL_HEADER
+                )
                 if _hdr and secrets.compare_digest(_hdr, _ITT) and _is_trusted_loopback(request):
                     # Impersonation: when the agent's loopback call sets
-                    # X-Odysseus-Owner, attribute the request to that user only
+                    # X-Rapha-Owner (or the upstream legacy alias) attributes
+                    # the request to that user only.
                     # if they exist. Authorization checks remain separate; this
                     # is just owner attribution for notes/calendar/etc.
-                    _impersonate = (request.headers.get("X-Odysseus-Owner") or "").strip()
+                    _impersonate = (
+                        request.headers.get("X-Rapha-Owner")
+                        or request.headers.get("X-Odysseus-Owner")
+                        or ""
+                    ).strip()
                     _auth_mgr = getattr(request.app.state, "auth_manager", None) or auth_manager
                     if _impersonate and _impersonate in getattr(_auth_mgr, "users", {}):
                         request.state.current_user = _impersonate
@@ -350,9 +370,9 @@ if AUTH_ENABLED:
 
             # --- Bearer token auth (API tokens for external integrations) ---
             auth_header = request.headers.get("authorization", "")
-            if auth_header.startswith("Bearer ody_"):
-                raw_token = auth_header[7:]
-                # Sanity check: tokens are "ody_" + 43 chars of base64
+            raw_token = auth_header[7:] if auth_header.startswith("Bearer ") else ""
+            if is_supported_api_token(raw_token):
+                # Sanity check: tokens are a known prefix + urlsafe base64.
                 if len(raw_token) < 12 or len(raw_token) > 100:
                     return JSONResponse(status_code=401, content={"error": "Invalid API token"})
                 prefix = raw_token[:8]
@@ -403,7 +423,7 @@ if AUTH_ENABLED:
                 return JSONResponse(status_code=401, content={"error": "Invalid API token"})
 
             # --- Cookie-based session auth ---
-            token = request.cookies.get(SESSION_COOKIE)
+            token = get_session_cookie(request)
             if not auth_manager.validate_token(token):
                 if path.startswith("/api/"):
                     return JSONResponse(status_code=401, content={"error": "Not authenticated"})
@@ -788,6 +808,9 @@ app.include_router(setup_contacts_routes())
 
 from companion import setup_companion_routes
 app.include_router(setup_companion_routes())
+
+from routes.bridge_routes import setup_bridge_routes
+app.include_router(setup_bridge_routes(document_router=document_router))
 
 # ========= ROUTES (kept in app.py) =========
 

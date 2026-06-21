@@ -1,5 +1,13 @@
 # Acknowledgments
 
+Rapha is an independent healthcare-focused distribution of
+[Odysseus](https://github.com/pewdiepie-archdaemon/odysseus). The upstream
+project and its contributors remain the authors and copyright holders of the
+base application. Rapha-specific integration and clinical-layer changes are
+maintained at [carlosglz1912/rapha](https://github.com/carlosglz1912/rapha).
+
+![Odysseus upstream wordmark](docs/odysseus-wordmark.png)
+
 Odysseus stands on the shoulders of a lot of open-source work. This file
 credits the projects whose code, assets, or designs are included in or
 adapted by this repository, and notes their licenses.
@@ -42,7 +50,7 @@ The full license texts are kept in [`licenses/`](licenses/).
 ## Bundled via Docker Compose
 
 These services are pulled as images by the project's `docker-compose.yml`
-and run alongside Odysseus on `docker compose up`. They are not modified —
+and run alongside Rapha on `docker compose up`. They are not modified —
 just composed.
 
 | Service | Image | Purpose | License |
@@ -123,7 +131,7 @@ Core (`requirements.txt`) and optional (`requirements-optional.txt`):
 
 ## Companion services (interoperated with, not bundled)
 
-Odysseus talks to these over the network/API. They are **not** distributed
+Rapha talks to these over the network/API. They are **not** distributed
 with this project; their licenses do not bind this codebase, but they deserve
 credit:
 
@@ -137,10 +145,10 @@ credit:
 
 ---
 
-### License-compatibility notes (for the repo's own LICENSE choice)
+### License-compatibility notes
 
-The **core ships fully permissive** (MIT-compatible), so the two copyleft
-concerns from earlier are resolved:
+Rapha as a whole is distributed under **AGPL-3.0-or-later**. The notes below
+record dependency license choices; they do not narrow Rapha's license:
 
 - **PDF text extraction** now uses **`pypdf`** (BSD-3-Clause) and **encoding
   detection** uses **`charset-normalizer`** (MIT). chardet (LGPL-2.1) has been
@@ -148,13 +156,12 @@ concerns from earlier are resolved:
 - **PyMuPDF (AGPL-3.0)** is no longer a core dependency. It is **optional** and
   used *only* by the PDF form-filling feature (`src/pdf_forms.py` and the form
   endpoints in `routes/document_routes.py`), lazy-imported and listed in
-  `requirements-optional.txt`. The MIT core runs without it. If you choose to
-  install it, AGPL's network clause then applies to *that feature* for your
-  deployment (Artifex also sells a commercial PyMuPDF license that lifts this).
+  `requirements-optional.txt`. Rapha runs without it. Artifex also offers a
+  commercial PyMuPDF license for deployments that require different terms.
 - **`caldav`** (Python lib) is **dual-licensed GPL-3.0-or-later OR Apache-2.0**.
-  Odysseus uses it under **Apache-2.0**, which is permissive and MIT-compatible.
+  Rapha uses it under **Apache-2.0**.
 - **`markitdown`** (Microsoft) is **MIT** and used only as an *optional* dependency for Office/EPUB text
-  extraction (`src/markitdown_runtime.py`), lazy-imported with graceful fallback — the MIT core runs without
+  extraction (`src/markitdown_runtime.py`), lazy-imported with graceful fallback — Rapha runs without
   it. The cloud `az-doc-intel` extra is deliberately **not** installed, keeping extraction fully local.
 
 ---

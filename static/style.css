@@ -356,6 +356,30 @@ body.bg-pattern-sparkles {
       transition: background 0.1s;
     }
     .export-dropdown-item:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+
+    .clinical-template-menu {
+      position: fixed; background: var(--panel); border: 1px solid var(--border);
+      border-radius: 8px; padding: 4px; min-width: 220px;
+      max-width: min(320px, calc(100vw - 16px));
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4); z-index: 10050;
+      color: var(--fg); display: flex; flex-direction: column; gap: 2px;
+    }
+    .clinical-template-item {
+      display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+      width: 100%; padding: 8px 10px; font-size: 12px; line-height: 1.35;
+      text-align: left; cursor: pointer; border: none; border-radius: 6px;
+      background: transparent; color: inherit;
+    }
+    .clinical-template-item:hover,
+    .clinical-template-item:focus-visible {
+      background: color-mix(in srgb, var(--accent) 10%, transparent); outline: none;
+    }
+    .clinical-template-label { font-weight: 600; color: var(--fg); }
+    .clinical-template-desc {
+      font-size: 11px;
+      color: var(--muted, color-mix(in srgb, var(--fg) 55%, transparent));
+      line-height: 1.3;
+    }
     .export-dropdown-item .dropdown-icon {
       width: 14px; height: 14px;
       display: flex; align-items: center; justify-content: center;
