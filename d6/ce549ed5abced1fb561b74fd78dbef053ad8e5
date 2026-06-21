@@ -1,0 +1,270 @@
+install-service.sh
+  s_e3c532ec3a56f7::t_bacb3546880687 5,8,12-13,18-20
+scripts/rapha-calendar
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+seeds/skills/clinical/privacidad/SKILL.md
+  s_e3c532ec3a56f7::t_7126790dbddc4e 1-30
+AGENTS.md
+  s_e3c532ec3a56f7::t_9c12aa4e869d25 1-22,24,26-77
+  s_e3c532ec3a56f7::t_12b0958487552e 23,25
+static/style.css
+  s_e3c532ec3a56f7::t_5ea83bbc87d0d1 359-382
+static/clinical/templates.json
+  s_e3c532ec3a56f7::t_7126790dbddc4e 1-46
+package.json
+  s_e3c532ec3a56f7::t_d6d7f37fde6e97 2-5
+  s_e3c532ec3a56f7::t_22e32989e88dea 8
+static/js/sessions.js
+  s_e3c532ec3a56f7::t_8ad887cc74c2c7 65,1576
+  s_e3c532ec3a56f7::t_1027fb3549f5eb 1509
+tests/test_gpu_compose_standalone.py
+  s_e3c532ec3a56f7::t_dccf1d652101d5 8,26,55
+static/js/cookbookServe.js
+  s_e3c532ec3a56f7::t_1027fb3549f5eb 1344
+  s_e3c532ec3a56f7::t_8ad887cc74c2c7 2498
+tests/test_rapha_dispatcher.py
+  s_e3c532ec3a56f7::t_41e69e4f62d241 1-34
+src/runtime_paths.py
+  s_e3c532ec3a56f7::t_22e32989e88dea 24,29-30
+scripts/rapha-signature
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+static/sw.js
+  s_e3c532ec3a56f7::t_1027fb3549f5eb 1
+app.py
+  s_e3c532ec3a56f7::t_360e06030935c4 374
+  s_e3c532ec3a56f7::t_dccf1d652101d5 39
+  s_e3c532ec3a56f7::t_22e32989e88dea 40-42,60,115,117,134-135
+  s_e3c532ec3a56f7::t_cab2bfec6abe15 199,329-337,340-341,344-348,373,375,426
+  s_e3c532ec3a56f7::t_cbfc95e0d3bd5c 220-221,812-813
+static/js/document.js
+  s_e3c532ec3a56f7::t_cda766d9335682 5957,5965,5968-5977,5980-5982,5993-5995,9922
+core/middleware.py
+  s_e3c532ec3a56f7::t_48680d99fa548a 11-14
+  s_e3c532ec3a56f7::t_22e32989e88dea 20-26,50-52
+static/js/theme.js
+  s_e3c532ec3a56f7::t_8ad887cc74c2c7 186,1261
+static/js/galleryEditor.js
+  s_e3c532ec3a56f7::t_1027fb3549f5eb 3192
+scripts/rapha
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1-13,20-28,30-31,34-59
+  s_e3c532ec3a56f7::t_55d25f50707783 14-19,29
+  s_e3c532ec3a56f7::t_0be582ec2dad58 32-33
+seeds/skills/clinical/nota-soap/SKILL.md
+  s_e3c532ec3a56f7::t_7126790dbddc4e 1-31
+start-macos.sh
+  s_e3c532ec3a56f7::t_9d8e996fa83fab 2,6,11,33-36,45,50,163-164,174,206,216,233,235,241,260
+routes/auth_routes.py
+  s_e3c532ec3a56f7::t_22e32989e88dea 84-90,101,176,180,185,212
+docker-compose.gpu-nvidia.yml
+  s_e3c532ec3a56f7::t_36d706cb2dcfd6 55-63
+  s_e3c532ec3a56f7::t_55d25f50707783 13,48-54
+static/js/group.js
+  s_e3c532ec3a56f7::t_1027fb3549f5eb 830
+scripts/rapha-sessions
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+core/rapha_env.py
+  s_e3c532ec3a56f7::t_dccf1d652101d5 1-15
+scripts/rapha-cookbook
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+scripts/rapha-gallery
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+scripts/rapha-preset
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+scripts/rapha-webhook
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+static/index.html
+  s_e3c532ec3a56f7::t_bacb3546880687 5,13,20,103,153-160,170-171,508,695,941,944,946,1002,1701,2021,2269
+  s_e3c532ec3a56f7::t_59fc6d6a627dc8 6,43,98,142,166
+  s_e3c532ec3a56f7::t_5ea83bbc87d0d1 880
+tests/test_privacy_filter.py
+  s_e3c532ec3a56f7::t_90d09b7e0f704e 141-149
+  s_e3c532ec3a56f7::t_7126790dbddc4e 1-140,150-156
+scripts/rapha-research
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+static/js/chatRenderer.js
+  s_e3c532ec3a56f7::t_8ad887cc74c2c7 1877,2167
+static/js/a11y.js
+  s_e3c532ec3a56f7::t_1027fb3549f5eb 3,59
+tests/test_rapha_compat.py
+  s_e3c532ec3a56f7::t_90d09b7e0f704e 7-12,49-62
+  s_e3c532ec3a56f7::t_6b1b6b31f09a58 4
+  s_e3c532ec3a56f7::t_2854fc82609dea 3,63-66
+  s_e3c532ec3a56f7::t_360e06030935c4 1-2,5-6,13-48
+build-macos-app.sh
+  s_e3c532ec3a56f7::t_bacb3546880687 2,7,9,13,17,19,52,68,77,79,83,132,140,169
+  s_e3c532ec3a56f7::t_08b77bea4de4c8 30-31,33-35,41,57,75
+static/js/clinical-templates.js
+  s_e3c532ec3a56f7::t_7126790dbddc4e 1-88
+static/js/storage.js
+  s_e3c532ec3a56f7::t_22e32989e88dea 4-26
+scripts/rapha-logs
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+routes/codex_routes.py
+  s_e3c532ec3a56f7::t_9c12aa4e869d25 17
+  s_e3c532ec3a56f7::t_9de74102e075b6 21-26
+routes/bridge_routes.py
+  s_e3c532ec3a56f7::t_cbfc95e0d3bd5c 1-184
+static/js/cookbookRunning.js
+  s_e3c532ec3a56f7::t_8ad887cc74c2c7 222
+static/js/slashCommands.js
+  s_e3c532ec3a56f7::t_1027fb3549f5eb 5259
+  s_e3c532ec3a56f7::t_8ad887cc74c2c7 296,415,455,646,2456,2494-2495,2525,3240,3472,3493,3906,4345,4369,5301,5402
+scripts/rapha-backup
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+tests/test_docker_devops_hardening.py
+  s_e3c532ec3a56f7::t_dccf1d652101d5 29
+tests/test_setup_clinical_seed.py
+  s_e3c532ec3a56f7::t_59503b21c1ea6e 1-27
+tests/test_privacy_llm_paths.py
+  s_e3c532ec3a56f7::t_17aad80ee066f6 1-100
+tests/test_readme_ascii_fenced.py
+  s_e3c532ec3a56f7::t_dccf1d652101d5 25-26,28
+scripts/rapha-personal
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+docker-compose.yml
+  s_e3c532ec3a56f7::t_55d25f50707783 2,37-43
+  s_e3c532ec3a56f7::t_36d706cb2dcfd6 44-52
+scripts/rapha-tasks
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+scripts/rapha-theme
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+static/js/cookbook-diagnosis.js
+  s_e3c532ec3a56f7::t_8ad887cc74c2c7 211,636
+docker/gpu.nvidia.yml
+  s_e3c532ec3a56f7::t_dccf1d652101d5 24
+static/login.html
+  s_e3c532ec3a56f7::t_59fc6d6a627dc8 7
+  s_e3c532ec3a56f7::t_bacb3546880687 6,26,140,256,314
+src/privacy_filter.py
+  s_e3c532ec3a56f7::t_4a711b9ec57eee 12,56,58-59,62-64,66-72,108-140,147-148,151-153
+  s_e3c532ec3a56f7::t_7126790dbddc4e 1-11,13-55,57,60-61,65,73-107,141-146,149-150,154-155
+docker-compose.gpu-amd.yml
+  s_e3c532ec3a56f7::t_55d25f50707783 14,49-55
+  s_e3c532ec3a56f7::t_36d706cb2dcfd6 56-64
+static/app.js
+  s_e3c532ec3a56f7::t_5ea83bbc87d0d1 2,28,355,1074-1079,2125,3346,4086,4088
+scripts/rapha-bootstrap-opendoctor
+  s_e3c532ec3a56f7::t_de904c932f1ef7 1-146
+scripts/rapha-mcp
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+tests/test_bridge_routes.py
+  s_e3c532ec3a56f7::t_962cd2369e2a76 1-2,4-6,8-92,158,194-202
+  s_e3c532ec3a56f7::t_90d09b7e0f704e 159-193
+  s_e3c532ec3a56f7::t_e9890ba922d16f 3,7,93-157
+tests/test_api_token_routes.py
+  s_e3c532ec3a56f7::t_e9890ba922d16f 174,179,210-217
+static/js/settings.js
+  s_e3c532ec3a56f7::t_8ad887cc74c2c7 2593,2993,3889,4489,5307
+rapha_env.py
+  s_e3c532ec3a56f7::t_dccf1d652101d5 1-46
+.env.example
+  s_e3c532ec3a56f7::t_49e395ef8f871d 1,14,66,75,85,91,146,152,157,162,166-172,192
+  s_e3c532ec3a56f7::t_d0d58202920443 3-4
+tests/test_runtime_paths.py
+  s_e3c532ec3a56f7::t_dccf1d652101d5 49
+static/js/cookbook-hwfit.js
+  s_e3c532ec3a56f7::t_8ad887cc74c2c7 869
+scripts/rapha-docs
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+docs/UPSTREAM_SYNC.md
+  s_e3c532ec3a56f7::t_9c12aa4e869d25 1-67
+routes/integration_helpers.py
+  s_e3c532ec3a56f7::t_9c12aa4e869d25 6
+  s_e3c532ec3a56f7::t_9de74102e075b6 1-5,7-80
+static/js/keyboard-shortcuts.js
+  s_e3c532ec3a56f7::t_8ad887cc74c2c7 214
+scripts/rapha-contacts
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+static/js/research/panel.js
+  s_e3c532ec3a56f7::t_1027fb3549f5eb 13
+rapha-ui.service
+  s_e3c532ec3a56f7::t_bacb3546880687 1-17
+scripts/rapha-memory
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+scripts/rapha-notes
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+static/js/tasks.js
+  s_e3c532ec3a56f7::t_1027fb3549f5eb 1086
+scripts/rapha-mail
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+static/js/emailLibrary.js
+  s_e3c532ec3a56f7::t_8ad887cc74c2c7 921,937,1088
+static/js/gallery.js
+  s_e3c532ec3a56f7::t_1027fb3549f5eb 2518
+static/js/init.js
+  s_e3c532ec3a56f7::t_1027fb3549f5eb 1
+scripts/rapha-skills
+  s_e3c532ec3a56f7::t_fa370eb7e21c68 2
+  s_e3c532ec3a56f7::t_713d37f53a8ede 1
+seeds/skills/clinical/literatura/SKILL.md
+  s_e3c532ec3a56f7::t_7126790dbddc4e 1-31
+static/js/notes.js
+  s_e3c532ec3a56f7::t_cda766d9335682 14,2079-2081,2110,2112-2116,2118,2149-2157
+static/manifest.json
+  s_e3c532ec3a56f7::t_5c1bd46aede7c6 12
+  s_e3c532ec3a56f7::t_22e32989e88dea 2-4
+docs/VISION.md
+  s_e3c532ec3a56f7::t_9c12aa4e869d25 1-62
+static/js/cookbook.js
+  s_e3c532ec3a56f7::t_8ad887cc74c2c7 784,918,2289,2328
+routes/api_token_routes.py
+  s_e3c532ec3a56f7::t_22e32989e88dea 36-42,137
+README.md
+  s_e3c532ec3a56f7::t_bacb3546880687 1,4,15,22,25-26,31,56,58,60-62
+static/js/chat.js
+  s_e3c532ec3a56f7::t_8ad887cc74c2c7 3092
+docker/gpu.amd.yml
+  s_e3c532ec3a56f7::t_dccf1d652101d5 13
+static/icons/rapha.svg
+  s_e3c532ec3a56f7::t_5c1bd46aede7c6 1-2,4-8
+  s_e3c532ec3a56f7::t_a3bccf4e0aa417 3
+static/js/presets.js
+  s_e3c532ec3a56f7::t_1027fb3549f5eb 66,70
+setup.py
+  s_e3c532ec3a56f7::t_5ea83bbc87d0d1 2,19,37-39,47-70,269,291-294
+  s_e3c532ec3a56f7::t_ff2da3d78320ef 136,139,168
+src/llm_core.py
+  s_e3c532ec3a56f7::t_5ea83bbc87d0d1 1409-1411,1560-1562,1728-1729
+ACKNOWLEDGMENTS.md
+  s_e3c532ec3a56f7::t_bacb3546880687 3-8
+  s_e3c532ec3a56f7::t_1f80851c60d2f1 9-10,53,134,148,150-151,159-160,162,164
+src/constants.py
+  s_e3c532ec3a56f7::t_48680d99fa548a 8
+  s_e3c532ec3a56f7::t_22e32989e88dea 10
+  s_e3c532ec3a56f7::t_dccf1d652101d5 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "d6ce549ed5abced1fb561b74fd78dbef053ad8e5",
+  "prompts": {},
+  "sessions": {
+    "s_e3c532ec3a56f7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019ee763-9571-7591-a420-dd57ea5dff55",
+        "model": "gpt-5.5"
+      },
+      "human_author": "carlosglz1912 <carlosglz1912@gmail.com>"
+    }
+  }
+}
