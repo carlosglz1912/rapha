@@ -237,9 +237,12 @@ def test_help_includes_limit():
     audit = load_module()
 
     help_text = audit.build_parser().format_help()
+    # Strip ANSI escape sequences (Python 3.14 argparse may colorize output)
+    import re
+    plain = re.sub(r"\x1b\[[0-9;]*m", "", help_text)
 
-    assert "--limit LIMIT" in help_text
-    assert "Live mode: max open PRs to fetch/analyze" in help_text
+    assert "--limit LIMIT" in plain
+    assert "Live mode: max open PRs to fetch/analyze" in plain
 
 
 def test_progress_goes_to_stderr_not_stdout(monkeypatch, capsys):

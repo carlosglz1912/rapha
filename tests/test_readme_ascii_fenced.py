@@ -22,11 +22,10 @@ def _fenced_segments(text: str):
     return parts[1::2]
 
 
-def test_readme_opens_with_wordmark_title():
-    # The README must still open with a recognizable Odysseus title: now the
-    # centered wordmark image rather than an H1 / ASCII banner.
+def test_readme_opens_with_rapha_title():
+    # The downstream README must open with the public Rapha product identity.
     head = "\n".join(README.read_text(encoding="utf-8").splitlines()[:15])
-    assert 'alt="Odysseus"' in head, "README must open with the Odysseus wordmark image"
+    assert head.startswith("# Rapha"), "README must open with the Rapha title"
 
 
 def test_reintroduced_ascii_banner_stays_fenced():

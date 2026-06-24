@@ -81,7 +81,13 @@ class SetAdminRequest(BaseModel):
 class SetOpenRegistrationRequest(BaseModel):
     enabled: bool
 
-SESSION_COOKIE = "odysseus_session"
+SESSION_COOKIE = "rapha_session"
+LEGACY_SESSION_COOKIE = "odysseus_session"
+
+
+def get_session_cookie(request: Request) -> Optional[str]:
+    """Read the Rapha cookie first, then the pre-rebrand cookie."""
+    return request.cookies.get(SESSION_COOKIE) or request.cookies.get(LEGACY_SESSION_COOKIE)
 
 
 def setup_auth_routes(auth_manager: AuthManager) -> APIRouter:
@@ -92,7 +98,7 @@ def setup_auth_routes(auth_manager: AuthManager) -> APIRouter:
     _setup_limiter = RateLimiter(max_requests=3, window_seconds=300)
 
     def _get_current_user(request: Request) -> Optional[str]:
-        token = request.cookies.get(SESSION_COOKIE)
+        token = get_session_cookie(request)
         return auth_manager.get_username_for_token(token)
 
     @router.post("/setup")
@@ -167,15 +173,16 @@ def setup_auth_routes(auth_manager: AuthManager) -> APIRouter:
 
     @router.post("/logout")
     async def logout(request: Request, response: Response):
-        token = request.cookies.get(SESSION_COOKIE)
+        token = get_session_cookie(request)
         if token:
             auth_manager.revoke_token(token)
         response.delete_cookie(SESSION_COOKIE, path="/")
+        response.delete_cookie(LEGACY_SESSION_COOKIE, path="/")
         return {"ok": True}
 
     @router.get("/status")
     async def auth_status(request: Request):
-        token = request.cookies.get(SESSION_COOKIE)
+        token = get_session_cookie(request)
         result = auth_manager.status(token)
         result["signup_enabled"] = auth_manager.signup_enabled
         # Include the caller's effective privileges so the frontend can
@@ -202,7 +209,7 @@ def setup_auth_routes(auth_manager: AuthManager) -> APIRouter:
             raise HTTPException(401, "Not authenticated")
         if len(body.new_password) < PASSWORD_MIN_LENGTH:
             raise HTTPException(400, f"Password must be at least {PASSWORD_MIN_LENGTH} characters")
-        current_token = request.cookies.get(SESSION_COOKIE)
+        current_token = get_session_cookie(request)
         ok = await asyncio.to_thread(auth_manager.change_password, user, body.current_password, body.new_password)
         if not ok:
             raise HTTPException(400, "Current password is incorrect")
@@ -760,7 +767,7 @@ def setup_auth_routes(auth_manager: AuthManager) -> APIRouter:
             api_key = integ.get("api_key", "")
             auth_type = (integ.get("auth_type") or "none").lower()
             headers = {
-                "Title": "Odysseus connectivity test",
+                "Title": "Rapha connectivity test",
                 "Tags": "white_check_mark",
                 "Priority": "default",
             }
@@ -773,7 +780,7 @@ def setup_auth_routes(auth_manager: AuthManager) -> APIRouter:
                 async with httpx.AsyncClient(timeout=8.0) as client:
                     r = await client.post(
                         full_url,
-                        content="Connectivity test from Odysseus. If you see this on your phone, ntfy is wired up correctly.",
+                        content="Connectivity test from Rapha. If you see this on your phone, ntfy is wired up correctly.",
                         headers=headers,
                     )
                 if r.is_success:
@@ -804,7 +811,7 @@ def setup_auth_routes(auth_manager: AuthManager) -> APIRouter:
                 return {"ok": False, "message": "No webhook URL set — paste the full Discord webhook URL into the Base URL field."}
             payload = {
                 "embeds": [{
-                    "title": "Odysseus connectivity test",
+                    "title": "Rapha connectivity test",
                     "description": "If you see this, your Discord Webhook integration is wired up correctly.",
                     "color": 5793266,
                 }]

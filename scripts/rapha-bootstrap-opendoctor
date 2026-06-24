@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+"""rapha-bootstrap-opendoctor — Create an opendoctor API token for this host.
+
+Creates a POST /api/tokens request with profile=opendoctor and prints the
+raw token to stdout (exit 0). All errors and diagnostics go to stderr
+(exit 1).
+
+Usage:
+    rapha-bootstrap-opendoctor --admin-token RAPHA_ADMIN_TOKEN
+    rapha-bootstrap-opendoctor --base-url http://127.0.0.1:7000 --admin-token sk-xxx
+
+Requires Python 3.8+ with no extra dependencies (uses only stdlib).
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+import urllib.error
+import urllib.parse
+import urllib.request
+import uuid
+
+
+def _get_hostname() -> str:
+    """Return short hostname, falling back to 'unknown'."""
+    try:
+        import socket
+        name = socket.gethostname()
+        return name.split(".")[0] or "unknown"
+    except Exception:
+        return "unknown"
+
+
+TOKEN_NAME_PREFIX = "opendoctor-bootstrap"
+
+
+def build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(
+        prog="rapha-bootstrap-opendoctor",
+        description=(
+            "Create an opendoctor-profile API token for this machine.\n\n"
+            "Calls POST /api/tokens on a running Rapha instance with "
+            "profile=opendoctor and prints the raw token to stdout. "
+            "Use this token to configure the OpenDoctor desktop app."
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=(
+            "Examples:\n"
+            "  rapha-bootstrap-opendoctor --admin-token rph_abc123\n"
+            "  rapha-bootstrap-opendoctor --base-url http://localhost:7000 \\\n"
+            "      --admin-token rph_abc123\n\n"
+            "Exit codes:\n"
+            "  0  Token created and printed to stdout\n"
+            "  1  Error (details on stderr)"
+        ),
+    )
+    p.add_argument(
+        "--base-url",
+        default="http://127.0.0.1:7000",
+        help="Rapha base URL (default: http://127.0.0.1:7000)",
+    )
+    p.add_argument(
+        "--admin-token",
+        required=True,
+        help="Existing Rapha admin token for authentication",
+    )
+    return p
+
+
+def _make_token_name() -> str:
+    """Generate a unique token name for this host."""
+    host = _get_hostname()
+    suffix = uuid.uuid4().hex[:8]
+    return f"{TOKEN_NAME_PREFIX}-{host}-{suffix}"
+
+
+def create_token(base_url: str, admin_token: str) -> str:
+    """Call POST /api/tokens and return the raw token string.
+
+    Raises on non-2xx or connection failure.
+    """
+    url = f"{base_url.rstrip('/')}/api/tokens"
+    token_name = _make_token_name()
+    data = urllib.parse.urlencode({"name": token_name, "profile": "opendoctor"}).encode()
+
+    req = urllib.request.Request(
+        url,
+        data=data,
+        headers={
+            "Authorization": f"Bearer {admin_token}",
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            body = resp.read().decode()
+    except urllib.error.HTTPError as e:
+        detail = ""
+        try:
+            detail = e.read().decode()
+        except Exception:
+            detail = str(e)
+        sys.stderr.write(f"HTTP {e.code} from {url}: {detail}\n")
+        sys.exit(1)
+    except urllib.error.URLError as e:
+        sys.stderr.write(
+            f"Connection error: {e.reason}\n"
+            f"Ensure Rapha is running at {base_url}\n"
+        )
+        sys.exit(1)
+    except OSError as e:
+        sys.stderr.write(f"Network error: {e}\n")
+        sys.exit(1)
+
+    try:
+        parsed = json.loads(body)
+    except json.JSONDecodeError as e:
+        sys.stderr.write(f"Invalid JSON response: {e}\nBody: {body}\n")
+        sys.exit(1)
+
+    raw_token = parsed.get("token")
+    if not raw_token:
+        sys.stderr.write(f"Response missing 'token' field: {body}\n")
+        sys.exit(1)
+
+    return raw_token
+
+
+def main() -> None:
+    parser = build_parser()
+    args = parser.parse_args()
+
+    raw_token = create_token(args.base_url, args.admin_token)
+
+    # Print ONLY the raw token to stdout — no additional output.
+    sys.stdout.write(raw_token + "\n")
+    sys.stdout.flush()
+
+
+if __name__ == "__main__":
+    main()

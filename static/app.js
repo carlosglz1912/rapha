@@ -1,5 +1,5 @@
 // ============================================
-// Odysseus UI — Main Application Orchestrator
+// Rapha UI — Main Application Orchestrator
 // ES6 module — entry point, no exports (wires all modules together)
 // ============================================
 import Storage from './js/storage.js';
@@ -25,6 +25,7 @@ import galleryModule from './js/gallery.js';
 import tasksModule from './js/tasks.js';
 import calendarModule from './js/calendar.js';
 import notesModule from './js/notes.js';
+import { pickDocumentTemplate } from './js/clinical-templates.js';
 import adminModule from './js/admin.js';
 import settingsModule from './js/settings.js';
 // Eagerly bind unified minimize/restore behavior across all tool modals.
@@ -351,7 +352,7 @@ function initializeEventListeners() {
       e.stopPropagation();
       exportMenu.classList.remove('open');
       const meta = sessionModule.getSessions().find(s => s.id === sessionModule.getCurrentSessionId());
-      const sessionName = meta ? meta.name : 'Odysseus Chat';
+      const sessionName = meta ? meta.name : 'Rapha Chat';
       const originalTitle = document.title;
       document.title = sessionName;
       const chatHistory = document.getElementById('chat-history');
@@ -1070,7 +1071,12 @@ function initializeEventListeners() {
     libraryNewDocBtn.addEventListener('click', async (e) => {
       e.stopPropagation();
       try {
-        if (documentModule && documentModule.newDocument) await documentModule.newDocument();
+        const template = await pickDocumentTemplate(libraryNewDocBtn);
+        if (template && documentModule?.newDocumentFromTemplate) {
+          await documentModule.newDocumentFromTemplate(template);
+        } else if (documentModule?.newDocument) {
+          await documentModule.newDocument();
+        }
       } catch (err) {
         console.error('New document from Library failed:', err);
         if (uiModule && uiModule.showError) uiModule.showError('Could not create document');
@@ -2116,7 +2122,7 @@ function initializeEventListeners() {
       pickerWrap.classList.toggle('picker-auto-hidden', w < PICKER_HIDE_WIDTH);
       // Hide placeholder text
       if (textarea) {
-        textarea.setAttribute('placeholder', w < PLACEHOLDER_HIDE_WIDTH ? '' : 'Message Odysseus...');
+        textarea.setAttribute('placeholder', w < PLACEHOLDER_HIDE_WIDTH ? '' : 'Message Rapha...');
       }
       // Hide entire bottom toolbar (tools, mode toggle) — only send button remains
       if (inputBottom) {
@@ -3339,7 +3345,7 @@ function initializeEventListeners() {
 // ============================================
 // INITIALIZATION ON PAGE LOAD
 // ============================================
-function startOdysseusApp() {
+function startRaphaApp() {
   if (window.__odysseusAppStarted) return;
   window.__odysseusAppStarted = true;
   // Set CSS variables
@@ -4079,7 +4085,7 @@ function startOdysseusApp() {
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', startOdysseusApp, { once: true });
+  document.addEventListener('DOMContentLoaded', startRaphaApp, { once: true });
 } else {
-  startOdysseusApp();
+  startRaphaApp();
 }

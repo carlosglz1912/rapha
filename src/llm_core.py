@@ -1516,6 +1516,9 @@ def llm_call(url: str, model: str, messages: List[Dict], temperature: float = LL
     else:
         messages_copy = non_sys
 
+    from src.privacy_filter import maybe_redact_messages_for_endpoint
+    messages_copy = maybe_redact_messages_for_endpoint(url, messages_copy)
+
     provider = _detect_provider(url)
     cache_key = _get_cache_key(url, model, messages_copy, temperature, max_tokens)
     cached_response = _get_cached_response(cache_key)
@@ -1674,6 +1677,9 @@ async def llm_call_async(
         messages_copy = [{"role": "system", "content": "\n\n".join(sys_parts)}] + non_sys
     else:
         messages_copy = non_sys
+
+    from src.privacy_filter import maybe_redact_messages_for_endpoint
+    messages_copy = maybe_redact_messages_for_endpoint(url, messages_copy)
 
     cache_key = _get_cache_key(url, model, messages_copy, temperature, max_tokens)
     cached_response = _get_cached_response(cache_key)
@@ -1841,6 +1847,9 @@ async def stream_llm(url: str, model: str, messages: List[Dict], temperature: fl
         messages_copy = [{"role": "system", "content": "\n\n".join(sys_parts)}] + non_sys
     else:
         messages_copy = non_sys
+
+    from src.privacy_filter import maybe_redact_messages_for_endpoint
+    messages_copy = maybe_redact_messages_for_endpoint(url, messages_copy)
 
     if provider == "anthropic":
         target_url = _normalize_anthropic_url(url)

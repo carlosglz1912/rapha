@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Odysseus — first-time setup script.
+"""Rapha — first-time setup script.
 
 Creates data directories, initializes the database, and sets up an
 initial admin user. Safe to re-run (skips what already exists).
@@ -16,7 +16,7 @@ sys.path.insert(0, BASE_DIR)
 from src.constants import (
     DATA_DIR, AUTH_FILE, UPLOAD_DIR, PERSONAL_DIR, PERSONAL_UPLOADS_DIR,
     TTS_CACHE_DIR, GENERATED_IMAGES_DIR, DEEP_RESEARCH_DIR, CHROMA_DIR,
-    RAG_DIR, MEMORY_VECTORS_DIR, PASSWORD_MIN_LENGTH,
+    RAG_DIR, MEMORY_VECTORS_DIR, PASSWORD_MIN_LENGTH, SKILLS_DIR,
 )
 from core.auth import RESERVED_USERNAMES
 
@@ -34,11 +34,40 @@ DIRS = [
     os.path.join(BASE_DIR, "logs"),
 ]
 
+CLINICAL_SKILLS_SEED = os.path.join(BASE_DIR, "seeds", "skills", "clinical")
+CLINICAL_SKILLS_DEST = os.path.join(SKILLS_DIR, "clinical")
+
 
 def create_dirs():
     for d in DIRS:
         os.makedirs(d, exist_ok=True)
         print(f"  [ok] {os.path.relpath(d, BASE_DIR)}/")
+
+
+def seed_clinical_skills() -> tuple[int, int]:
+    """Copy bundled clinical skills without overwriting user changes."""
+    if not os.path.isdir(CLINICAL_SKILLS_SEED):
+        print("  [skip] No clinical skill seeds found")
+        return 0, 0
+    os.makedirs(CLINICAL_SKILLS_DEST, exist_ok=True)
+    seeded = 0
+    skipped = 0
+    for entry in sorted(os.listdir(CLINICAL_SKILLS_SEED)):
+        source = os.path.join(CLINICAL_SKILLS_SEED, entry, "SKILL.md")
+        if not os.path.isfile(source):
+            continue
+        destination_dir = os.path.join(CLINICAL_SKILLS_DEST, entry)
+        destination = os.path.join(destination_dir, "SKILL.md")
+        if os.path.exists(destination):
+            skipped += 1
+            continue
+        os.makedirs(destination_dir, exist_ok=True)
+        shutil.copy2(source, destination)
+        seeded += 1
+        print(f"  [ok] clinical/{entry}/SKILL.md")
+    if not seeded:
+        print(f"  [skip] Clinical skills already present ({skipped})")
+    return seeded, skipped
 
 
 def init_database():
@@ -104,10 +133,10 @@ def create_default_admin():
         if username and password:
             # Both provided via env — validate before using
             if username in RESERVED_USERNAMES:
-                print(f"  [error] ODYSSEUS_ADMIN_USER '{username}' is a reserved username")
+                print(f"  [error] RAPHA_ADMIN_USER '{username}' is a reserved username")
                 return "failed"
             if len(password) < PASSWORD_MIN_LENGTH:
-                print(f"  [error] ODYSSEUS_ADMIN_PASSWORD must be at least {PASSWORD_MIN_LENGTH} characters")
+                print(f"  [error] RAPHA_ADMIN_PASSWORD must be at least {PASSWORD_MIN_LENGTH} characters")
                 return "failed"
         elif sys.stdin.isatty() and not os.getenv("ODYSSEUS_SKIP_ADMIN_PROMPT"):
             # Interactive terminal — ask the user
@@ -136,7 +165,7 @@ def create_default_admin():
             print(f"  [ok] Initial admin user created ({username})")
             if not os.getenv("ODYSSEUS_ADMIN_PASSWORD"):
                 print(f"        Temporary password: {password}")
-                print(f"        ** Change it after first login. Set ODYSSEUS_ADMIN_PASSWORD to choose your own. **")
+                print(f"        ** Change it after first login. Set RAPHA_ADMIN_PASSWORD to choose your own. **")
         return "created"
     except ImportError as e:
         if "incompatible architecture" in str(e).lower():
@@ -237,7 +266,7 @@ def check_arch():
 
 
 def main():
-    print("\n=== Odysseus Setup ===\n")
+    print("\n=== Rapha Setup ===\n")
 
     # Load .env so pre-seeded ODYSSEUS_ADMIN_USER / ODYSSEUS_ADMIN_PASSWORD (and
     # other deployment vars) are honored on native installs, not just when they
@@ -268,7 +297,10 @@ def main():
         print(f"  [warn] Database init failed: {e}")
         print("         This is OK if dependencies aren't installed yet.")
 
-    print("\n5. Creating initial admin...")
+    print("\n5. Seeding clinical skills...")
+    seed_clinical_skills()
+
+    print("\n6. Creating initial admin...")
 
     admin_status = "failed"
 

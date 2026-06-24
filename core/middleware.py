@@ -8,13 +8,22 @@ from fastapi import HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 
+from core.rapha_env import apply_rapha_env_aliases
+
+apply_rapha_env_aliases()
+
 
 # Per-process token that lets the in-app tool layer hit admin-gated
 # routes via HTTP loopback (the agent's tool calls don't carry the
 # admin user's session cookie). Set once at import; tools read the
 # same value from this module. Never persisted or exposed externally.
-INTERNAL_TOOL_TOKEN = os.environ.get("ODYSSEUS_INTERNAL_TOKEN") or secrets.token_hex(32)
-INTERNAL_TOOL_HEADER = "X-Odysseus-Internal-Token"
+INTERNAL_TOOL_TOKEN = (
+    os.environ.get("RAPHA_INTERNAL_TOKEN")
+    or os.environ.get("ODYSSEUS_INTERNAL_TOKEN")
+    or secrets.token_hex(32)
+)
+INTERNAL_TOOL_HEADER = "X-Rapha-Internal-Token"
+LEGACY_INTERNAL_TOOL_HEADER = "X-Odysseus-Internal-Token"
 # Pseudo-username on in-process tool-loopback requests; require_admin trusts it and it is reserved.
 INTERNAL_TOOL_USER = "internal-tool"
 
@@ -38,7 +47,9 @@ def require_admin(request: Request):
     # (b) the auth middleware already validated the token and stamped
     #     request.state.current_user = "internal-tool".
     try:
-        hdr = request.headers.get(INTERNAL_TOOL_HEADER)
+        hdr = request.headers.get(INTERNAL_TOOL_HEADER) or request.headers.get(
+            LEGACY_INTERNAL_TOOL_HEADER
+        )
         if hdr and secrets.compare_digest(hdr, INTERNAL_TOOL_TOKEN):
             return
         if getattr(request.state, "current_user", None) == INTERNAL_TOOL_USER:

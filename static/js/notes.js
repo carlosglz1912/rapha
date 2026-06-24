@@ -12,6 +12,7 @@ import { snapModalToZone } from './tileManager.js';
 import { applyEdgeDock, clearDockSide } from './modalSnap.js';
 import { topToolWindowZ, topPortalZ } from './toolWindowZOrder.js';
 import { bindMenuDismiss, dismissOrRemove } from './escMenuStack.js';
+import { pickNoteTemplate } from './clinical-templates.js';
 
 const API_BASE = window.location.origin;
 let _open = false;
@@ -2080,6 +2081,9 @@ function _renderQuickAdd(body) {
       </button>
     </div>
     <input type="text" class="notes-quick-input" placeholder="Add a to-do…" />
+    <button type="button" class="notes-quick-icon notes-template-btn" data-action="template" title="Plantilla clínica">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M10 13h4M10 17h4M8 9h1"/></svg>
+    </button>
     <button class="notes-quick-icon" data-action="photo" title="Attach photo">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
     </button>
@@ -2108,11 +2112,15 @@ function _renderQuickAdd(body) {
     });
   });
   // Click input or type → expand to full form
-  const expandToForm = (initialType = 'note', initialText = '') => {
+  const expandToForm = (initialType = 'note', initialText = '', seed = {}) => {
     _editingId = '__new__';
-    const form = _buildForm({ note_type: initialType });
+    const form = _buildForm({
+      note_type: seed.note_type || initialType,
+      title: seed.title || initialText || '',
+      content: seed.content || '',
+    });
     form.classList.add('note-form-new');
-    if (initialText) {
+    if (initialText && !seed.title) {
       const titleEl = form.querySelector('.note-form-title');
       if (titleEl) titleEl.value = initialText;
     }
@@ -2142,6 +2150,16 @@ function _renderQuickAdd(body) {
     expandToForm(currentType);
     // Trigger photo input on the new form
     setTimeout(() => document.querySelector('.note-form-photo-btn')?.click(), 50);
+  });
+  wrap.querySelector('[data-action="template"]').addEventListener('click', async (event) => {
+    event.stopPropagation();
+    try {
+      const template = await pickNoteTemplate(event.currentTarget);
+      if (template) expandToForm(template.note_type || 'note', '', template);
+    } catch (error) {
+      console.error('Clinical note template failed:', error);
+      if (uiModule?.showError) uiModule.showError('No se pudo cargar la plantilla');
+    }
   });
 }
 

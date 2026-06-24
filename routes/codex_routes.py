@@ -5,7 +5,6 @@ reuse existing Odysseus helpers and enforce API-token scopes before touching
 user data.
 """
 
-import asyncio
 import json
 import zipfile
 from io import BytesIO
@@ -15,10 +14,16 @@ from typing import Any
 from fastapi import APIRouter, BackgroundTasks, Body, HTTPException, Request
 from fastapi.responses import StreamingResponse
 
-from src.auth_helpers import require_authenticated_request, require_user
+from src.auth_helpers import require_authenticated_request
 from src.tool_implementations import do_manage_notes
 from src.constants import COOKBOOK_STATE_FILE
 from routes._validators import validate_remote_host, validate_ssh_port
+from routes.integration_helpers import (
+    call_as_owner as _as_owner,
+    find_endpoint as _find_endpoint,
+    scope_owner as _scope_owner,
+    scope_owner_all as _scope_owner_all,
+)
 
 
 COOKBOOK_READ_SCOPES = {"cookbook:read", "cookbook:launch"}
@@ -54,68 +59,6 @@ def _ssh_prefix_for_task(task: dict) -> tuple[str, str]:
     ssh_port = validate_ssh_port(port_value or None) or ""
     port_flag = f"-p {ssh_port} " if ssh_port and ssh_port != "22" else ""
     return host, port_flag
-
-
-async def _as_owner(request: Request, owner: str, fn, *args, **kwargs):
-    """Run an existing route handler with request.state.current_user temporarily
-    set to ``owner`` so its internal get_current_user/require_user calls see
-    the scope-gated owner (not the "api" pseudo-user the bearer middleware sets).
-    Restores the original value when done. Works for sync and async handlers."""
-    orig = getattr(request.state, "current_user", None)
-    orig_api_token = getattr(request.state, "api_token", None)
-    request.state.current_user = owner
-    request.state.api_token = False
-    try:
-        result = fn(*args, **kwargs)
-        if asyncio.iscoroutine(result):
-            result = await result
-        return result
-    finally:
-        request.state.current_user = orig
-        if orig_api_token is None:
-            try:
-                delattr(request.state, "api_token")
-            except AttributeError:
-                pass
-        else:
-            request.state.api_token = orig_api_token
-
-
-def _scope_owner(request: Request, allowed: set[str]) -> str:
-    """Return the data owner if the caller is allowed for this Codex action."""
-    if getattr(request.state, "api_token", False):
-        scopes = set(getattr(request.state, "api_token_scopes", []) or [])
-        if not scopes.intersection(allowed):
-            required = " or ".join(sorted(allowed))
-            raise HTTPException(403, f"API token missing required scope: {required}")
-        owner = getattr(request.state, "api_token_owner", None)
-        if not owner:
-            raise HTTPException(403, "API token has no owner")
-        return owner
-    return require_user(request)
-
-
-def _scope_owner_all(request: Request, required: set[str]) -> str:
-    """Return owner only when an API token has every required scope."""
-    if getattr(request.state, "api_token", False):
-        scopes = set(getattr(request.state, "api_token_scopes", []) or [])
-        missing = required - scopes
-        if missing:
-            raise HTTPException(403, f"API token missing required scope: {' and '.join(sorted(missing))}")
-        owner = getattr(request.state, "api_token_owner", None)
-        if not owner:
-            raise HTTPException(403, "API token has no owner")
-        return owner
-    return require_user(request)
-
-
-def _find_endpoint(router: APIRouter | None, method: str, path: str):
-    if router is None:
-        return None
-    for route in getattr(router, "routes", []):
-        if getattr(route, "path", "") == path and method in getattr(route, "methods", set()):
-            return route.endpoint
-    return None
 
 
 def setup_codex_routes(
