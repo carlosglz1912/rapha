@@ -1,0 +1,40 @@
+static/js/cookbook.js
+  s_7854a13ff965bc::t_c0abfb35156102 925
+static/js/gallery.js
+  s_7854a13ff965bc::t_581406423a64d4 2520
+setup.py
+  s_7854a13ff965bc::t_a656972f60b67d 269
+static/js/document.js
+  s_7854a13ff965bc::t_21d60cc282a075 6131-6133
+static/js/notes.js
+  s_7854a13ff965bc::t_3f20da94a90bbc 15
+static/index.html
+  s_7854a13ff965bc::t_242d4d1f7ef0bf 894
+app.py
+  s_7854a13ff965bc::t_4b4724becd3e48 822-824
+static/js/theme.js
+  s_7854a13ff965bc::t_e78968ae1b7553 187
+tests/test_pr_blocker_audit.py
+  s_7854a13ff965bc::t_f122a11a7680f1 240-242,244-245
+README.md
+  s_7854a13ff965bc::t_911d3b6aca8d91 1-2
+  s_7854a13ff965bc::t_a251d687a07826 4,8,19,26,29-30,35
+src/constants.py
+  s_7854a13ff965bc::t_f6cbb3330f5163 5,8-10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.11",
+  "base_commit_sha": "a138d27b6c0304bc5ba8bf06f7f7d1355e4c0ae4",
+  "prompts": {},
+  "sessions": {
+    "s_7854a13ff965bc": {
+      "agent_id": {
+        "tool": "droid",
+        "id": "18746747-e117-4667-a6e7-08b9886481ad",
+        "model": "custom:DeepSeek-V4-Flash-(BYOK)-1"
+      },
+      "human_author": "carlosglz1912 <carlosglz1912@gmail.com>"
+    }
+  }
+}
