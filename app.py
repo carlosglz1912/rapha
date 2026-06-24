@@ -1206,6 +1206,6 @@ if __name__ == "__main__":
     import uvicorn
 
     bind_host = os.getenv("APP_BIND", "127.0.0.1")
-    bind_port = int(os.getenv("APP_PORT", "7000"))
+    bind_port = int(os.getenv("APP_PORT", "7100"))
 
     uvicorn.run(app, host=bind_host, port=bind_port, log_level="info")

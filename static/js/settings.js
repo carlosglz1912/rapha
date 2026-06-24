@@ -1793,8 +1793,8 @@ function initAppearance() {
   modalEl.querySelectorAll('[data-privacy-key]').forEach(function(chk) {
     chk.addEventListener('change', function() {
       if (chk.dataset.privacyKey !== 'sensitive-blur') return;
-      localStorage.setItem('odysseus-sensitive-blur', chk.checked ? 'on' : 'off');
-      window.dispatchEvent(new CustomEvent('odysseus-sensitive-blur-change', {
+      localStorage.setItem('rapha-sensitive-blur', chk.checked ? 'on' : 'off');
+      window.dispatchEvent(new CustomEvent('rapha-sensitive-blur-change', {
         detail: { enabled: chk.checked }
       }));
     });
@@ -1832,7 +1832,7 @@ function syncAppearanceCheckboxes() {
 
 function syncPrivacyCheckboxes() {
   modalEl.querySelectorAll('[data-privacy-key="sensitive-blur"]').forEach(function(chk) {
-    chk.checked = localStorage.getItem('odysseus-sensitive-blur') === 'on';
+    chk.checked = localStorage.getItem('rapha-sensitive-blur') === 'on';
   });
 }
 
@@ -2124,7 +2124,7 @@ async function initShortcuts() {
         body: JSON.stringify({ keybinds }),
       });
       // Update global keybinds so they take effect immediately
-      window._odysseusKeybinds = keybinds;
+      window._raphaKeybinds = keybinds;
       if (uiModule && uiModule.showToast) uiModule.showToast('Shortcut saved');
     } catch (e) {
       console.error('Failed to save keybinds:', e);
@@ -2313,12 +2313,12 @@ function initAccount() {
       // SECURITY: wipe all client-side state on logout so the next user that
       // signs in on this browser doesn't inherit the previous account's
       // session id, last-used model, draft chat input, or any cached lists.
-      // Keep "odysseus-last-user" so the login form remembers the username
+      // Keep "rapha-last-user" so the login form remembers the username
       // (if "Remember me" was on). Without this the chat composer pre-loaded
       // the previous user's last model into a fresh session, which read as
       // cross-account leakage.
       try {
-        const _keepKeys = new Set(['odysseus-last-user']);
+        const _keepKeys = new Set(['rapha-last-user']);
         const _toRemove = [];
         for (let i = 0; i < localStorage.length; i++) {
           const k = localStorage.key(i);
@@ -2363,7 +2363,7 @@ function initAll() {
 
 function notifyIntegrationsChanged() {
   try {
-    window.dispatchEvent(new CustomEvent('odysseus-integrations-changed'));
+    window.dispatchEvent(new CustomEvent('rapha-integrations-changed'));
   } catch (_) {}
 }
 
@@ -2600,7 +2600,7 @@ async function initReminderSettings() {
   applyReminderChannelAvailability();
   if (!channelSel.dataset.integrationRefreshWired) {
     channelSel.dataset.integrationRefreshWired = '1';
-    window.addEventListener('odysseus-integrations-changed', () => {
+    window.addEventListener('rapha-integrations-changed', () => {
       refreshReminderChannelAvailability().catch(e => console.warn('Failed to refresh reminder channels', e));
     });
   }
@@ -2698,7 +2698,7 @@ async function initReminderSettings() {
     save({ reminder_channel: channelSel.value });
     // Email reminder bell visibility tracks this — broadcast so the
     // email library can re-evaluate without waiting for a re-open.
-    try { window.dispatchEvent(new CustomEvent('odysseus-reminder-channel-changed', { detail: { channel: channelSel.value } })); } catch (_) {}
+    try { window.dispatchEvent(new CustomEvent('rapha-reminder-channel-changed', { detail: { channel: channelSel.value } })); } catch (_) {}
   });
   if (emailToIn) {
     let emailDebounce;
@@ -3510,8 +3510,8 @@ const AGENT_CONFIGS = {
     buildSetup: (origin, token) => `export ODYSSEUS_URL=${origin}
 export ODYSSEUS_API_TOKEN='${token}'
 mkdir -p ~/plugins
-curl -fsSL -H "Authorization: Bearer $ODYSSEUS_API_TOKEN" "$ODYSSEUS_URL/api/codex/plugin.zip" -o /tmp/odysseus-codex-plugin.zip
-python3 -m zipfile -e /tmp/odysseus-codex-plugin.zip ~/plugins
+curl -fsSL -H "Authorization: Bearer $ODYSSEUS_API_TOKEN" "$ODYSSEUS_URL/api/codex/plugin.zip" -o /tmp/rapha-codex-plugin.zip
+python3 -m zipfile -e /tmp/rapha-codex-plugin.zip ~/plugins
 python3 - <<'PY'
 import json
 from pathlib import Path
@@ -3527,16 +3527,16 @@ data.setdefault("name", "personal")
 data.setdefault("interface", {}).setdefault("displayName", "Personal")
 plugins = data.setdefault("plugins", [])
 entry = {
-    "name": "odysseus",
-    "source": {"source": "local", "path": "./plugins/odysseus"},
+    "name": "rapha",
+    "source": {"source": "local", "path": "./plugins/rapha"},
     "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
     "category": "Productivity",
 }
-data["plugins"] = [item for item in plugins if item.get("name") != "odysseus"] + [entry]
+data["plugins"] = [item for item in plugins if item.get("name") != "rapha"] + [entry]
 p.write_text(json.dumps(data, indent=2) + "\\n")
 PY
-codex plugin add odysseus@personal
-python3 ~/plugins/odysseus/scripts/odysseus_api.py capabilities`,
+codex plugin add rapha@personal
+python3 ~/plugins/rapha/scripts/rapha_api.py capabilities`,
   },
   claude: {
     label: 'Claude Agent',
@@ -3548,9 +3548,9 @@ python3 ~/plugins/odysseus/scripts/odysseus_api.py capabilities`,
     buildSetup: (origin, token) => `export ODYSSEUS_URL=${origin}
 export ODYSSEUS_API_TOKEN='${token}'
 mkdir -p ~/.claude
-curl -fsSL -H "Authorization: Bearer $ODYSSEUS_API_TOKEN" "$ODYSSEUS_URL/api/claude/plugin.zip" -o /tmp/odysseus-claude-skill.zip
-python3 -m zipfile -e /tmp/odysseus-claude-skill.zip ~/.claude/
-python3 ~/.claude/skills/odysseus/scripts/odysseus_api.py capabilities`,
+curl -fsSL -H "Authorization: Bearer $ODYSSEUS_API_TOKEN" "$ODYSSEUS_URL/api/claude/plugin.zip" -o /tmp/rapha-claude-skill.zip
+python3 -m zipfile -e /tmp/rapha-claude-skill.zip ~/.claude/
+python3 ~/.claude/skills/rapha/scripts/rapha_api.py capabilities`,
   },
 };
 
@@ -4169,7 +4169,7 @@ async function initUnifiedIntegrations() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = format === 'csv' ? 'odysseus-contacts.csv' : 'odysseus-contacts.vcf';
+        a.download = format === 'csv' ? 'rapha-contacts.csv' : 'rapha-contacts.vcf';
         document.body.appendChild(a);
         a.click();
         a.remove();

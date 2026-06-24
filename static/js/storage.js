@@ -10,7 +10,7 @@ function migrateRaphaKeysToUpstream() {
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (!key || !key.startsWith('rapha-')) continue;
-      const upstreamKey = `odysseus-${key.slice('rapha-'.length)}`;
+      const upstreamKey = `rapha-${key.slice('rapha-'.length)}`;
       if (localStorage.getItem(upstreamKey) === null) copies.push([key, upstreamKey]);
     }
     for (const [source, target] of copies) {
@@ -26,8 +26,8 @@ migrateRaphaKeysToUpstream();
 
 // ── Key constants ──
 export const KEYS = {
-  THEME: 'odysseus-theme',
-  TOGGLES: 'odysseus-toggles',
+  THEME: 'rapha-theme',
+  TOGGLES: 'rapha-toggles',
   SIDEBAR_COLLAPSED: 'sidebar-collapsed',
   SIDEBAR_WIDTH: 'sidebar-width',
   SIDEBAR_SIDE: 'sidebar-side',
@@ -36,19 +36,19 @@ export const KEYS = {
   COMPARE_CHAT: 'compare-continue-chat',
   COMPARE_BLIND: 'compare-blind',
   COMPARE_RANDOM: 'compare-randomize',
-  MODELS_EXPANDED: 'odysseus-model-expanded',
-  MODEL_ENDPOINTS: 'odysseus-model-endpoints',
-  MODEL_SELECTED: 'odysseus-selected-model',
-  SORT_ORDER: 'odysseus-sessions-sort',
-  CHAT_SEARCH_SCOPE: 'odysseus-search-scope',
-  INCOGNITO: 'odysseus-incognito',
-  RAG_ACTIVE: 'odysseus-rag-active',
-  MCP_ACTIVE: 'odysseus-mcp-active',
+  MODELS_EXPANDED: 'rapha-model-expanded',
+  MODEL_ENDPOINTS: 'rapha-model-endpoints',
+  MODEL_SELECTED: 'rapha-selected-model',
+  SORT_ORDER: 'rapha-sessions-sort',
+  CHAT_SEARCH_SCOPE: 'rapha-search-scope',
+  INCOGNITO: 'rapha-incognito',
+  RAG_ACTIVE: 'rapha-rag-active',
+  MCP_ACTIVE: 'rapha-mcp-active',
   SECTION_ORDER: 'sidebar-section-order',
   ADMIN_LAST_TAB: 'admin-last-tab',
-  DENSITY: 'odysseus-density',
-  UI_SCALE: 'odysseus-ui-scale',
-  WORKSPACE: 'odysseus-workspace'
+  DENSITY: 'rapha-density',
+  UI_SCALE: 'rapha-ui-scale',
+  WORKSPACE: 'rapha-workspace'
 };
 
 /**

@@ -177,5 +177,5 @@ def test_storage_keys_are_namespaced(node_available):
         }));
     """)
     out = _run_node(script)
-    assert out["votes"].startswith("odysseus-")
-    assert out["pool"].startswith("odysseus-")
+    assert out["votes"].startswith("rapha-")
+    assert out["pool"].startswith("rapha-")

@@ -32,8 +32,8 @@ export const THEMES = {
 };
 
 const DEFAULT_THEME = 'dark';
-const LS_KEY = 'odysseus-theme';
-const CUSTOM_THEMES_KEY = 'odysseus-custom-themes';
+const LS_KEY = 'rapha-theme';
+const CUSTOM_THEMES_KEY = 'rapha-custom-themes';
 
 const FONT_MAP = {
   mono: "'Fira Code', monospace",
@@ -391,7 +391,7 @@ export function applyFontDensity(font, density) {
 // UI text-size scale (accessibility). Global and independent of the active
 // theme, so the chosen size persists across theme switches. Stored as a plain
 // percentage string ('100' | '110' | '125' | '150').
-const UI_SCALE_KEY = 'odysseus-ui-scale';
+const UI_SCALE_KEY = 'rapha-ui-scale';
 const DEFAULT_UI_SCALE = '100';
 
 export function applyUiScale(scale) {

@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  A private, self-hosted AI workspace for healthcare professionals, built on Odysseus 1.0.
+  A private, self-hosted AI workspace for healthcare professionals.
 </p>
 
 <p align="center">
@@ -61,8 +61,7 @@ Rapha is a self-hosted workspace with powerful local tools. Keep auth enabled, k
 
 ## Upstream
 
-Rapha tracks [pewdiepie-archdaemon/odysseus](https://github.com/pewdiepie-archdaemon/odysseus)
-as a reviewed base. Product-specific code stays in thin compatibility,
+Rapha tracks the upstream repository as a reviewed base. Product-specific code stays in thin compatibility,
 clinical, and OpenDoctor bridge layers; see [docs/VISION.md](docs/VISION.md).
 
 ## License
