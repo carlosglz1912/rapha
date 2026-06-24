@@ -1,0 +1,64 @@
+companion/__init__.py
+  s_ec6f9cfa070f87::t_506c9724c8f2da 1
+README.md
+  s_ec6f9cfa070f87::t_a9073f5e1c7b91 8
+  s_ec6f9cfa070f87::t_63774e8baae152 64
+tests/test_security_regressions.py
+  s_ec6f9cfa070f87::t_8bf05511695682 128
+.env.example
+  s_ec6f9cfa070f87::t_cd6935a8f12cfb 40
+  s_ec6f9cfa070f87::t_e669e6ef3b02f8 143-144
+  s_ec6f9cfa070f87::t_3397ff1403c363 177
+static/js/cookbook.js
+  s_ec6f9cfa070f87::t_ac96937df65876 2124
+companion/routes.py
+  s_ec6f9cfa070f87::t_c9e5c62469e509 244
+  s_ec6f9cfa070f87::t_738e79eb8acbc4 92
+  s_ec6f9cfa070f87::t_89fab8c6a76d43 103
+companion/README.md
+  s_ec6f9cfa070f87::t_d0510e611f920d 4
+static/style.css
+  s_ec6f9cfa070f87::t_f4b7de77a23a42 2
+  s_ec6f9cfa070f87::t_1b5d70c2bbc24e 22773
+odysseus-ui.service
+  s_ec6f9cfa070f87::t_399816a368db0f 1,4,11-12,15
+src/constants.py
+  s_ec6f9cfa070f87::t_60cee488020337 123,127,132
+Dockerfile
+  s_ec6f9cfa070f87::t_71c12a14eef934 75-77
+tests/test_cookbook_dependency_completion_regression.py
+  s_ec6f9cfa070f87::t_a7ad6c097ae447 35
+tests/test_censor_pref_js.py
+  s_ec6f9cfa070f87::t_d6af2f9c200b61 42
+tests/test_compare_js.py
+  s_ec6f9cfa070f87::t_c801e461f71807 180-181
+tests/test_group_chat_storage.py
+  s_ec6f9cfa070f87::t_dc83a82b97ee75 11,13
+tests/test_internal_api_base.py
+  s_ec6f9cfa070f87::t_b6b5aad937567e 18-19
+app.py
+  s_ec6f9cfa070f87::t_57175a442d1e24 1209
+launcher.py
+  s_ec6f9cfa070f87::t_074f64f08ab734 70
+  s_ec6f9cfa070f87::t_c900ca6a6e5497 133
+  s_ec6f9cfa070f87::t_dfc739f98952da 42
+  s_ec6f9cfa070f87::t_c1680d9a63e4f3 98
+  s_ec6f9cfa070f87::t_8b074290ed7c32 102,104
+  s_ec6f9cfa070f87::t_d2a43368f9bbf8 56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.11",
+  "base_commit_sha": "be7283ca1cec1d46eb1ef81eb1b807b0c9145445",
+  "prompts": {},
+  "sessions": {
+    "s_ec6f9cfa070f87": {
+      "agent_id": {
+        "tool": "droid",
+        "id": "388d9d14-7726-44be-bbcd-992b5f3d136b",
+        "model": "custom:DeepSeek-V4-Flash-(BYOK)-1"
+      },
+      "human_author": "carlosglz1912 <carlosglz1912@gmail.com>"
+    }
+  }
+}
